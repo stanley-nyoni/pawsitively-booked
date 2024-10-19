@@ -1,0 +1,28 @@
+# Files to be ignored by git
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+.venv/
+venv/
+
+# Database files
+*.db
+instance/
+
+# Flask specific
+*.log
+instance/
+
+# Virtual environment
+.env
+.vscode/
+.idea/
+
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
