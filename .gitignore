@@ -26,3 +26,6 @@ instance/
 # Byte-compiled / optimized / DLL files
 *.pyc
 *.pyo
+
+# local test files
+test/
