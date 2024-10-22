@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if  current_user.is_authenticated %}
+    {% if current_user.user_type == 'dog_owner' %}
+        {% include 'dog_owner/home.html' %}
+    {% elif current_user.user_type == 'facility_owner' %}
+        {% include 'facility_owner/home.html' %}
+    {% endif %}
+{% else %}
+<div class="index-hero-section bg-light">
+        <div class="overlay py-5"></div>
+        <div class="container text-center index-hero-section-text">
+            <h1 class="display-5  mb-4">Welcome to PawsitivelyBooked</h1>
+            <p class="lead mb-4">The Ultimate Platform for Pet Care Providers and Pet Owners</p>
+            <p class="lead">Connecting pet care businesses with pet owners for a seamless experience</p>
+            <div class="mt-4">
+                <a href="{{url_for('signup')}}" class="btn btn-primary mr-3">Get Started Now </a>
+            </div>
+        </div>     
+</div>
+<div class="row">
+        <div class="col-lg-12 mt-4">
+            <h5 class="display-5 text-center">How it Works</h5>
+        <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+            <div class="col d-flex flex-column align-items-center align-items-md-start gap-2">
+                <h4 class="fs-4 text-body-emphasis">For Pet Owners</h4>
+                <p class="text-body-secondary lead">Easy Booking Process. With our intuitive booking system, you can easily find and book the perfect pet care provider for your furry friend.</p>
+                <a href="#" class="btn btn-primary">Get Started</a>
+            </div>
+        
+            <div class="col">
+                <div class="row row-cols-1 row-cols-sm-2 g-4">
+                    <div class="col d-flex flex-column gap-2 p-2 text-center rounded-3">
+                        <i class="bi bi-person-circle fs-3 text-primary"></i>
+                        <h5 class="fw-semibold mb-0 text-body-emphasis">Sign Up</h5>
+                        <p class="text-body-secondary">Register for an account and create a profile for your pet.</p>
+                    </div>
+        
+                    <div class="col d-flex flex-column gap-2 text-center p-2 rounded-3">
+                        <i class="bi bi-search fs-3 text-primary"></i> 
+                        <h5 class="fw-semibold mb-0 text-body-emphasis">Search</h5>
+                        <p class="text-body-secondary">Search for pet care providers in your area and filter by services offered.</p>
+                    </div>
+        
+                    <div class="col d-flex flex-column gap-2 text-center  p-2rounded-3">
+                        <i class="bi bi-calendar-plus fs-3 text-primary"></i>
+                        <h5 class="fw-semibold mb-0 text-body-emphasis">Book</h5>
+                        <p class="text-body-secondary">Book your pet's stay with the provider of your choice.</p>
+                    </div>
+        
+                    <div class="col d-flex flex-column gap-2 text-center  p-2 rounded-3">
+                        <i class="bi bi-star fs-3 text-primary"></i>
+                        <h5 class="fw-semibold mb-0 text-body-emphasis">Enjoy and Review</h5>
+                        <p class="text-body-secondary">Enjoy. Leave a review to help other pet owners.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="bg-light">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+                <div class="col order-2 order-md-1">
+                    <div class="row row-cols-1 row-cols-sm-2 g-4">
+                        <div class="col d-flex flex-column gap-2 p-2 text-center rounded-3">
+                            <i class="bi bi-person-circle fs-3 text-primary"></i> 
+                            <h5 class="fw-semibold mb-0 text-body-emphasis">Sign Up</h5>
+                            <p class="text-body-secondary">Register for an account and create a profile for your facility.</p>
+                        </div>
+                        <div class="col d-flex flex-column gap-2 p-2 text-center rounded-3">
+                            <i class="bi bi-envelope-check fs-3 text-primary"></i>
+                            <h5 class="fw-semibold mb-0 text-body-emphasis">Requests</h5>
+                            <p class="text-body-secondary">Receive booking requests from pet owners and accept or decline them.</p>
+                        </div>
+                        <div class="col d-flex flex-column gap-2 p-2 text-center rounded-3">
+                            <i class="bi bi-house-heart fs-3 text-primary"></i> 
+                            <h5 class="fw-semibold mb-0 text-body-emphasis">Host</h5>
+                            <p class="text-body-secondary">Host pets and provide the best care possible.</p>
+                        </div>
+                        <div class="col d-flex flex-column gap-2 p-2 text-center rounded-3">
+                            <i class="bi bi-star fs-3 text-primary"></i> 
+                            <h5 class="fw-semibold mb-0 text-body-emphasis">Get Reviews</h5>
+                            <p class="text-body-secondary">Get reviews from pet owners to build your reputation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col d-flex flex-column align-items-center  align-items-md-end gap-2 order-md-2 order-1">
+                    <h4 class="fs-4 text-body-emphasis">For Pet Care Providers</h4>
+                    <p class="text-body-secondary lead text-end text-center text-md-end">Grow Your Business. Reach more pet owners and grow your business with our platform.</p>
+                    <a href="#" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-4">
+    <section id="features" class="features">
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <h5 class="display-5 text-center">Features</h5>
+                <div class="container">
+                    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+                        <div class="col-lg-7 p-3 p-lg-5 pt-lg-3 text-center text-lg-start">
+                            <h4 class="fw-semibold lh-1">Find the Perfect Pet Care Provider</h4>
+                            <p class="lead">Browse through our extensive list of pet care providers and find the perfect match for your pet.</p>
+                        </div>
+                        <div class="col-lg-4 offset-lg-1 p-2 text-center text-lg-start">
+                            <img src="{{url_for('static', filename='images/features/undraw_hire_re_gn5j.svg')}}" class="img-fluid" style="max-width: 200px; display: inline-block;" alt="Find the Perfect Services">
+                        </div>
+                    </div>
+                </div>
+                
+            <div class="col-lg-12 mt-4">
+                <div class="container">
+                    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+                        <div class="col-lg-4 offset-lg-1 p-2 text-center text-lg-start">
+                            <img src="{{url_for('static', filename='images/features/undraw_booking_re_gw4j.svg')}}" style="max-width: 200px; display: inline-block;" class="img-fluid mb-3 mb-lg-0" alt="Book with Confidence">
+                        </div>
+                        <div class="col-lg-7 p-3 p-lg-5 pt-lg-3 text-center text-lg-start">
+                            <h4 class="fw-semibold lh-1">Book with Confidence</h4>
+                            <p class="lead">Book your pet's stay with confidence knowing that your pet is in good hands.</p>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            
+            <div class="col-lg-12 mt-4">
+                <div class="container">
+                    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+                        <div class="col-lg-7 p-3 p-lg-5 pt-lg-3 text-center text-lg-start">
+                            <h4 class="fw-semibold lh-1">Grow Your Business</h4>
+                            <p class="lead">Reach more pet owners and grow your business with our platform.</p>
+                        </div>
+                        <div class="col-lg-4 offset-lg-1 p-2 text-center text-lg-start">
+                            <img src="{{url_for('static', filename='images/features/undraw_progress_tracking_re_ulfg.svg')}}" style="max-width: 200px; display: inline-block;" class="img-fluid mb-3 mb-lg-0" alt="Grow your Business">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-12 mt-4">
+                <div class="container">
+                    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+                        <div class="col-lg-4 offset-lg-1 p-2 text-center text-lg-start">
+                            <img src="{{url_for('static', filename='images/features/undraw_reviews_lp8w.svg')}}" style="max-width: 200px; display: inline-block;" class="img-fluid mb-3 mb-lg-0" alt="Leave a Reivew">
+                        </div>
+                        <div class="col-lg-7 p-3 p-lg-5 pt-lg-3 text-center text-lg-start">
+                            <h4 class="fw-semibold lh-1">Leave a Review</h4>
+                            <p class="lead">Leave a review to help other pet owners make an informed decision.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </section>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-12">
+        <h5 class="display-5 text-center">FAQs</h5>
+        <div class="container">
+            <div class="accordion" id="faqs">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            How do I sign up for an account?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqs">
+                        <div class="accordion-body">
+                            To sign up for an account, click on the "Sign Up" button in the top right corner of the page. You will be prompted to enter your email address and create a password. Once you have completed the sign-up process, you will be able to create a profile for your pet or facility.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            How do I book a pet care provider?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqs">
+                        <div class="accordion-body">
+                            To book a pet care provider, search for providers in your area and filter by services offered. Once you have found a provider that meets your needs, click on the "Book Now" button to request a booking. The provider will review your request and either accept or decline it.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            How do I become a pet care provider?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqs">
+                        <div class="accordion-body">
+                            To become a pet care provider, sign up for an account and create a profile for your facility. Once your profile is complete, you will be able to receive booking requests from pet owners.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            How do I leave a review?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqs">
+                        <div class="accordion-body">
+                            To leave a review, log in to your account and navigate to the provider's profile page. Click on the "Leave a Review" button and follow the prompts to leave a review and rating.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-4 mb-4">
+                <a href="{{url_for('faqs')}}" class="btn btn-primary">
+                    View All FAQs
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endif %}
+
+{% endblock content %}
