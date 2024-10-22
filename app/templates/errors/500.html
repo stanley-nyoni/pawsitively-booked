@@ -1,0 +1,21 @@
+<!-- 500 Internal Server error -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center p-4">
+            <h1 class="display-1">500</h1>
+            <h2>Internal Server Error</h2>
+            <p class="lead">
+                Oops! Something went wrong. We are working on it.
+            </p>
+            <p>
+                <img src="{{ url_for('static', filename='images/errors/500-internal-server-error.svg')}}" alt="500-internal-server-error">
+            </p>
+            <a href="{{ url_for('index') }}" class="btn btn-warning">Take Me Home</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
