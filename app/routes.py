@@ -1,6 +1,7 @@
 # Module - app/routes.py
 
-
+import string
+import random
 from sqlalchemy import and_
 from geopy.distance import geodesic
 import requests, secrets, os
@@ -83,6 +84,17 @@ def calculate_distance(facility, user):
     facility_location = (facility.latitude, facility.longitude)
     distance = geodesic(user_location, facility_location).kilometers
     return round(distance, 2)
+
+
+# Generate a booking code.
+# This is used to create booking tickets and used to the public
+# See models
+
+def generate_booking_code():
+    length = 8
+    characters = string.ascii_uppercase + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))
+
 
 # --------------------INDEX--------------------
 
@@ -580,6 +592,9 @@ def create_booking():
         
         db.session.add(booking)
         db.session.commit()
+        booking_code = generate_booking_code()
+        booking.booking_code = booking_code
+        db.session.commit()
         flash('Booking successfully created.', 'success')
 
         check_in = booking.check_in.strftime('%B %d, %Y')
@@ -589,7 +604,7 @@ def create_booking():
 
         send_notification(
         booking.user.email,
-        'Booking Created Successfully!',
+        f'Booking Created Successfully! #ID {booking.booking_code}',
         template=(
             f'<p> Hi {booking.user.first_name}, </p>'
             f'<p> You have successfully created a booking at {booking.facility.name} '
@@ -604,7 +619,7 @@ def create_booking():
 
         send_notification(
         booking.facility.contact_email,
-        f'New Booking Request - Booking ID #{booking.id}',
+        f'New Booking Request - Booking ID #{booking.booking_code}',
         template=(
             f'<p> Hi {booking.facility.owner.first_name},</p>'
             f'<p> You have recieved a new  booking for {booking.facility.name} with ID #{booking.id}. </p>'
@@ -1031,7 +1046,7 @@ def accept_booking(booking_id):
     # Send notification to the user
     send_notification(
         booking.user.email,
-        'Your Booking is Now Confirmed - Thank you!',
+        f'Your Booking is Now Confirmed #ID {booking.booking_code} - Thank you!',
         template=(
             f'<p> Hi {booking.user.first_name}, </p>'
             f'<p> We are pleased to inform you that your booking at {booking.facility.name} '
@@ -1047,10 +1062,10 @@ def accept_booking(booking_id):
     # Send notification to the facility owner
     send_notification(
         booking.facility.contact_email,
-        f'New Booking Confirmed - Booking ID #{booking.id}',
+        f'New Booking Confirmed - Booking ID #{booking.booking_code}',
         template=(
             f'<p> Hi {booking.facility.owner.first_name}, </p>'
-            f'<p> You have accepted a booking for {booking.facility.name} with ID #{booking.id}. </p>'
+            f'<p> You have accepted a booking for {booking.facility.name} with ID #{booking.booking_code}. </p>'
             f'<p> <b>Check-in:</b> {check_in} </p>'
             f'<p> <b>Check-out:</b> {check_out} </p>'
             f'<p> <b>Number of dogs:</b> {booking.number_of_dogs} </p>'
@@ -1082,7 +1097,7 @@ def decline_booking(booking_id):
     check_in = booking.check_in.strftime('%B %d, %Y')
     check_out = booking.check_out.strftime('%B %d, %Y')
     send_notification(booking.user.email,
-                        'Your Booking Has Been Declined',
+                        f'Your Booking Has Been Declined #{booking.booking_code}',
                         template=f'<p> Hi {booking.user.first_name}, </p> <p> We regret to inform you that your booking at {booking.facility.name} has been declined. </p> <p> Here are the details of your booking: </p> <p> <b>Check-in: </b> {check_in} </p> <p> <b>Check-out: </b> {check_out} </p> <p> <b>Number of dogs: </b>{booking.number_of_dogs} </p><p><b> Facility: </b>{booking.facility.name} </p> <p> We apologize for any inconvenience this may have caused. Please feel free to contact us for further assistance. </p> <p> Best regards, </p> <p> The PawsitivelyBooked Team </p>')
     flash('Booking successfully declined.', 'warning')
     return redirect(url_for('dashboard_facility_owner'))
