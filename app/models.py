@@ -169,6 +169,7 @@ class Review(db.Model):
 class Booking(db.Model):
     '''Booking model'''
     id = db.Column(db.Integer, primary_key=True)
+    booking_code = db.Column(db.String(64))
     check_in = db.Column(db.DateTime)
     check_out = db.Column(db.DateTime)
     status = db.Column(db.String(64), default='pending')
