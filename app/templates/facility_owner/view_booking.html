@@ -16,10 +16,23 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <p class="lead">Booking Info</p>
+                                <p><strong>Booking Code:</strong> {{booking.booking_code}}</p>
                                 <p><strong>Number of Dogs: </strong> {{ booking.number_of_dogs }}</p>
                                 <p><strong>Check-in Date: </strong> {{ check_in }}</p>
                                 <p><strong>Check-out Date: </strong>{{ check_out }}</p>
-                                <p><strong>Services Requested: </strong>{{booking.daycare }}</p>
+                                {% if booking.daycare == "1" or booking.boarding == "1" %}
+                                <p><strong>Service Requested</strong></p>
+                                <ul>
+                                    {% if booking.daycare == "1" %}
+                                    <li>Daycare</li>
+                                    {% endif %}
+                                    {% if booking.boarding == "1" %}
+                                    <li>Boarding</li>
+                                    {% endif %}
+                                </ul>
+                                {% else %}
+                                <p>No services requested.</p>
+                                {% endif %}
                                 <p><strong>Created at: </strong>{{created_at }}</p>
                                 <p><strong>Last updated at: </strong>{{ updated_at }}</p>
                                 <p><strong>Status: </strong>{{ booking.status }}</p>
@@ -32,8 +45,10 @@
                             </div>
                             <div class="col-lg-12">
                                 {% if booking.status == 'pending' %}
-                                <a href="{{ url_for('accept_booking', booking_id=booking.id) }}" class="btn btn-success">Accept</a>
-                                <a href="{{ url_for('decline_booking', booking_id=booking.id) }}" class="btn btn-danger">Decline</a>
+                                <a href="{{ url_for('accept_booking', booking_id=booking.id) }}"
+                                    class="btn btn-success">Accept</a>
+                                <a href="{{ url_for('decline_booking', booking_id=booking.id) }}"
+                                    class="btn btn-danger">Decline</a>
                                 {% else %}
                                 <a href="{{ url_for('dashboard_facility_owner') }}" class="btn btn-dark">Back</a>
                                 {% endif %}
@@ -44,7 +59,6 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </div>
 {% endblock %}
-                
