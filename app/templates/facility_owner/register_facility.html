@@ -1,0 +1,134 @@
+<!-- Register Facility -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="login-pg pt-5">
+<div class="container login-section">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4 pb-2">Register Facility</legend>
+            <div class="form-group row">
+                <div class="col-md-12 mb-3">
+                    {{ form.name.label(class="form-control-label") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 mb-3">
+                    {{ form.street.label(class="form-control-label") }}
+                    {% if form.street.errors %}
+                        {{ form.street(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.street.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.street(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 mb-3">
+                    {{ form.city.label(class="form-control-label") }}
+                    {% if form.city.errors %}
+                        {{ form.city(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.city.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.city(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 mb-3">
+                    {{ form.postal_code.label(class="form-control-label") }}
+                    {% if form.postal_code.errors %}
+                        {{ form.postal_code(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.postal_code.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.postal_code(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 mb-3">
+                    {{ form.country.label(class="form-control-label") }}
+                    {% if form.country.errors %}
+                        {{ form.country(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.country.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.country(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 mb-3">
+                    {{ form.description.label(class="form-control-label") }}
+                    {% if form.description.errors %}
+                        {{ form.description(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.description.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.description(class="form-control form-control-lg") }}
+                    {% endif %} 
+                </div>
+                <div class="col-lg-6 mb-3">
+                    {{ form.contact_phone.label(class="form-control-label") }}
+                    {% if form.contact_phone.errors %}
+                        {{ form.contact_phone(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.contact_phone.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.contact_phone(class="form-control form-control-lg", placeholder="e.g 0712345678") }}
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 mb-3">
+                    {{ form.contact_email.label(class="form-control-label") }}
+                    {% if form.contact_email.errors %}
+                        {{ form.contact_email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.contact_email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.contact_email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.boarding(class="form-check-input") }}
+                    {{ form.boarding.label(class="form-check-label") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.daycare(class="form-check-input") }}
+                    {{ form.daycare.label(class="form-check-label") }}
+                </div>
+                <div class="form-group mt-4">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <p class="bg-info mt-4 rounded p-2">Don't worry you're able to finish setting up your Facility on your profile later.</p>
+
+</div>
+</div>
+{% endblock content %}

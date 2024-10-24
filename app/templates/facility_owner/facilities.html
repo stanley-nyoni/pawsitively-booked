@@ -1,0 +1,51 @@
+<!-- Display facilities -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-pg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="display-5">My Facilities</h1>
+                <p class="lead">View and manage your facilities.</p>
+                {% if facilities %}
+                {% for facility in facilities %}
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title text-center border-bottom pb-2">{{ facility.name }}</h5>
+                        <div class="row mt-4">
+                            <div class="col-lg-6">
+                                <p><strong>Name:</strong> {{ facility.name }}</p>
+                                <p><strong>Location:</strong> {{ facility.location }}</p>
+                                <p><strong>Description:</strong> {{ facility.description }}</p>
+                                <p><strong>Created On:</strong> {{ facility.created_on }}</p>
+                                <p><strong>Bookings:</strong> {{ facility.bookings_count }}</p>
+                                <p><strong>Operating Hours:</strong> {{ facility.operating_hours }}</p>
+                                <p><strong>Pricing:</strong> {{ facility.pricing }}</p>
+                                <p><strong>Amenities:</strong> {{ facility.amenities }}</p>
+                            </div>
+                            <div class="col-lg-6">
+                                <p><strong>Owner:</strong> {{ facility.owner.first_name }} {{ facility.owner.last_name }}</p>
+                                <p><strong>Owner Email:</strong> {{ facility.contact_email }}</p>
+                                <p><strong>Owner Phone:</strong> {{ facility.contact_phone }}</p>
+                                <p><strong>Owner Address:</strong> {{ facility.owner.address }}</p>
+                            </div>
+                            <div class="col-lg-12">
+                                <a href="{{ url_for('dashboard_facility_owner') }}" class="btn btn-dark">Back</a>
+                                <a href="{{ url_for('update_facility_profile', facility_id=facility.id) }}" class="btn btn-primary">Update</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="alert alert-info" role="alert">
+                    No facility found. <a href="{{url_for('facility_registration')}}"  class="alert-link text-decoration-none">Create a facility</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
