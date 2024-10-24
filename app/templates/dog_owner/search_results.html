@@ -1,0 +1,17 @@
+<!-- Search Facility -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="display-5">Search Results</h1>
+    {% if facilities %}
+        {% for facility in facilities %}
+            <h1>{{ facility.name }}</h1>
+            <p>{{ facility.description }}</p>
+            <a href="#" class="btn btn-primary">View Facility</a>
+        {% endfor %}
+    {% else %}
+        <h1>No facilities found</h1>
+    {% endif %}
+</div>
+{% endblock %}

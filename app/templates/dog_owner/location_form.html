@@ -1,0 +1,76 @@
+<!-- Location form -->
+
+{% extends 'base.html' %}
+
+{% block title %}Set Location{% endblock %}
+
+{% block content %}
+<div class="container-lg">
+    <div class="row p-4">
+        <div class="col-md-6 offset-md-3 login-section">
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4 pb-2">Set Location</legend>
+                    <div class="form-group mb-3">
+                        {{ form.street.label(class="form-control-label") }}
+                        {% if form.street.errors %}
+                            {{ form.street(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.street.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.street(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.city.label(class="form-control-label") }}
+                        {% if form.city.errors %}
+                            {{ form.city(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.city.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.city(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.postal_code.label(class="form-control-label") }}
+                        {% if form.postal_code.errors %}
+                            {{ form.postal_code(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.postal_code.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.postal_code(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.country.label(class="form-control-label") }}
+                        {% if form.country.errors %}
+                            {{ form.country(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.country.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.country(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group mt-4">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

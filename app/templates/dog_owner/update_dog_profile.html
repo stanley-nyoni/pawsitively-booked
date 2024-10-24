@@ -1,0 +1,120 @@
+<!-- Update dog profile -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-pg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="display-5">Update Dog Profile</h1>
+                <p class="lead">Update your dog's profile below.</p>
+                
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4 pb-2">Update Dog Profile</legend>
+                        <div class="form-group row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.name.label(class="form-control-label") }}
+                                {% if form.name.errors %}
+                                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.name.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.name(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.breed.label(class="form-control-label") }}
+                                {% if form.breed.errors %}
+                                    {{ form.breed(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.breed.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.breed(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.age.label(class="form-control-label") }}
+                                {% if form.age.errors %}
+                                    {{ form.age(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.age.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.age(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.size.label(class="form-control-label") }}
+                                {% if form.size.errors %}
+                                    {{ form.size(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.size.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.size(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.sex.label(class="form-control-label") }}
+                                {% if form.sex.errors %}
+                                    {{ form.sex(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.sex.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.sex(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.weight.label(class="form-control-label") }}
+                                {{ form.weight(class="form-control form-control-lg") }}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.emegergency_contact.label(class="form-control-label") }}
+                                {{ form.emegergency_contact(class="form-control form-control-lg") }}
+                            </div>
+                             <div class="col-lg-6 mb-3">
+                                {{ form.vet_name.label(class="form-control-label") }}
+                                {{ form.vet_name(class="form-control form-control-lg") }}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.vet_phone.label(class="form-control-label") }}
+                                {{ form.vet_phone(class="form-control form-control-lg") }}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.feeding_instructions.label(class="form-control-label") }}
+                                {{ form.feeding_instructions(class="form-control form-control-lg") }}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.medications.label(class="form-control-label") }}
+                                {{ form.medications(class="form-control form-control-lg") }}
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                {{ form.special_needs.label(class="form-control-label") }}
+                                {{ form.special_needs(class="form-control form-control-lg") }}
+                            </div>
+                            <div class="form-group mt-4">
+                                {{ form.submit(class="btn btn-outline-info") }}
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

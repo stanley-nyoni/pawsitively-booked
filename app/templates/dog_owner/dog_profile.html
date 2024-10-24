@@ -1,0 +1,67 @@
+<!-- Displaying dog profile -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-pg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="display-5">Dog Profile</h1>
+                <p class="lead">View your dog's profile below.</p>
+                {% if dogs %}
+                {% for dog in dogs %}
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title text-center border-bottom pb-2">{{ dog.name }} Profile</h5>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <p><strong>Name:</strong> {{ dog.name }}</p>
+                                <p><strong>Breed:</strong> {{ dog.breed }}</p>
+                                <p><strong>Age:</strong> {{ dog.age }}</p>
+                                <p><strong>Size:</strong> {{ dog.size }}</p>
+                                <p><strong>Weight:</strong> {{dog.weight}}</p>
+                                <p><strong>Emergency Contact:</strong> {{dog.emegergency_contact}}</p>
+                                <p><strong>Vet Name:</strong> {{dog.vet_name}}</p>
+                                <p><strong>Vet Contact:</strong> {{dog.vet_phone}}</p>
+                                <p><strong>Feeding Instructions: </strong> {{dog.feeding_instructions}}</p>
+                                <p><strong>Medications: </strong> {{dog.medications}}</p>
+                            </div>
+                            <div class="col-lg-6">
+                                <p><strong>Owner:</strong> {{ dog.owner.first_name }} {{ dog.owner.last_name }}</p>
+                                <p><strong>Owner Email:</strong> {{ dog.owner.email }}</p>
+                               {% if dog.owner.phone %}
+                                <p><strong>Owner Phone:</strong> {{ dog.owner.phone }}</p>
+                                {% else %}
+                                <p><strong>Owner Phone: </strong> 
+                                    <a href="{{ url_for('user_profile', dog_id=dog.id) }}">Add Phone</a>
+                                </p>
+                                {% endif %}
+                                
+                                {% if dog.owner.location %}
+                                <p><strong>Owner Address:</strong> {{ dog.owner.location }}</p>
+                                {% else %}
+                                <p><strong>Owner Address:</strong> 
+                                    <a href="{{url_for('set_location')}}">Set Location</a>
+
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-12">
+                                <a href="{{ url_for('dashboard_dog_owner') }}" class="btn btn-dark">Back</a>
+                                <a href="{{ url_for('update_dog_profile', dog_id=dog.id) }}" class="btn btn-primary">Update</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="alert alert-info" role="alert">
+                    No dog profile found.
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

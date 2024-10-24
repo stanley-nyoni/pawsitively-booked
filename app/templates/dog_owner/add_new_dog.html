@@ -1,0 +1,101 @@
+<!-- Add new dog -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="login-pg pt-5">
+<div class="container login-section">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4 pb-2">Register Your Dog</legend>
+            <div class="form-group row">
+                <div class="col-lg-6 mb-3">
+                    {{ form.name.label(class="form-control-label") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <label for="breed">Breed:</label>
+                    <input type="text" id="breedInput" name="breed" class="form-control  form-control-lg" placeholder="Type to search" list="breeds">
+                    <datalist id="breeds"></datalist>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    {{ form.age.label(class="form-control-label") }}
+                    {% if form.age.errors %}
+                        {{ form.age(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.age.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.age(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 mb-3">
+                    {{ form.size.label(class="form-control-label") }}
+                    {% if form.size.errors %}
+                        {{ form.size(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.size.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.size(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group mt-4">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <p class="bg-info mt-4 rounded p-2">Don't worry you're able to update your Dog profile later.</p>
+</div>
+</div>
+
+
+<script>
+    async function fetchBreeds() {
+        try {
+            const response = await fetch('https://dog.ceo/api/breeds/list/all');
+            const data = await response.json();
+            return Object.keys(data.message);
+        } catch (error) {
+            console.error('Error fetching breeds', error);
+            return [];
+        }
+    }
+
+    async function initAutocomplete() {
+        const breedInput = document.getElementById('breedInput');
+        breedInput.addEventListener('input', async function() {
+            const inputText = breedInput.value.toLowerCase();
+            const breeds = await fetchBreeds();
+            const suggestions = breeds.filter(breed => breed.toLowerCase().startsWith(inputText));
+            showSuggestions(suggestions);
+        });
+    }
+
+    function showSuggestions(suggestions) {
+        const datalist = document.getElementById('breeds');
+        datalist.innerHTML = '';
+        suggestions.forEach(suggestion => {
+            const option = document.createElement('option');
+            option.value = suggestion;
+            datalist.appendChild(option);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', initAutocomplete);
+</script>
+
+{% endblock content %}

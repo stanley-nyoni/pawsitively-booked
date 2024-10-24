@@ -1,0 +1,101 @@
+<!-- Create a new booking -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="login-pg pt-5">
+    <div class="container login-section">
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4 pb-2">Booking Details</legend>
+                <div class="form-group row">
+                    <div class="form-group">
+                        {{ form.facility.label }}:
+                        {{ form.facility(class="form-control") }}
+
+                        {% if form.facility.errors %}
+                            {% for error in form.facility.errors %}
+                                <span class="text-danger">[ {{ error }} ]</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="form-group mt-4">
+                        {{ form.check_in.label }}:
+                        <div class="input-group date" id="start_date" data-provide="datepicker">
+                            {{ form.check_in(class="form-control") }}
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                        {% if form.check_in.errors %}
+                            {% for error in form.check_in.errors %}
+                                <span class="text-danger">[ {{ error }} ]</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="form-group mt-4">
+                        {{ form.check_out.label }}:
+                        <div class="input-group date" id="end_date" data-provide="datepicker">
+                            {{ form.check_out(class="form-control") }}
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                        {% if form.check_out.errors %}
+                            {% for error in form.check_out.errors %}
+                                <span class="text-danger">[ {{ error }} ]</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="form-group mt-4 mb-3">
+                        {{ form.number_of_dogs.label }}:
+                        {{ form.number_of_dogs(class="form-control") }}
+
+                        {% if form.number_of_dogs.errors %}
+                            {% for error in form.number_of_dogs.errors %}
+                                <span class="text-danger">[ {{ error }} ]</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <label for="#">Select Service:</label>
+                    <div class="form-group">
+                        {{ form.daycare(class="form-check-input") }}
+                        {{ form.daycare.label(class="form-check-label") }}
+                    </div>
+                    <div class="form-group mt-2">
+                        {{ form.boarding(class="form-check-input") }}
+                        {{ form.boarding.label(class="form-check-label") }}
+                    </div>
+                    <div class="alert alert-info mt-4" role="alert">
+                           By default, the booking will be on boarding service if no service is selected. 
+                    </div>
+                    <div class="form-group mt-4">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#start_date').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: new Date(),
+            autoclose: true
+        });
+        $('#end_date').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: new Date(),
+            autoclose: true
+        });
+
+        $('#start_date').on('changeDate', function(){
+            var startDate = $(this).datepicker('getDate');
+            $('#end_date').datepicker('setStartDate', startDate);
+        });
+    });
+</script>
+
+{% endblock content %}

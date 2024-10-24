@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-pg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="row no-gutters  d-flex align-items-center p-2">
+                        <div class="col-md-2 ps-4">
+                            <img src="{{ url_for('static', filename='images/profile_pictures/default.jpeg') }}" class="card-img img-fluid rounded-circle" alt="profile picture" style="max-width:100px">
+                        </div>
+                        <div class="col-md-8">
+                            <h5 class="card-title">{{ facility.name }}</h5>
+                            {% if owner.username %}
+                                <p>by {{ owner.username }}</p>
+                            {% else %}
+                                <p>by {{ owner.first_name }}</p>
+                            {% endif %}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="d-flex align-items-center gap-2 text-success fw-bold">
+                                    <i class="bi bi-journal-check"></i>
+                                    <span>{{ facility.completed_bookings }}</span>
+                                    Completed Bookings
+                                </span>
+                                <span class="d-flex align-items-center gap-2 text-success fw-bold">
+                                    <i class="bi bi-repeat"></i>
+                                    <span>{{ facility.repeated_bookings}}</span>
+                                    Repeated Bookings
+                                </span>
+                                <span class="d-flex align-items-center gap-2 text-success fw-bold">
+                                    <i class="bi bi-bag"></i>
+                                    <span>{{ facility.repeated_customers}}</span>
+                                    Repeated Customers
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-4">
+                        <div class="col-md-12 border-bottom border-top p-2 d-flex justify-content-between">
+                            <div class="d-flex gap-2 fs-5 text-success">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>{{ facility.location }}</span>
+                            </div>
+                            <div class="book-btn">
+                                <a href="{{ url_for('create_booking', facility_name=facility.name) }}" class="btn btn-primary">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 pb-4">
+                            <h5 class="card-title p-4">Facility Gallery</h5>
+                            <div class="row gallery p-4">
+                                {% if facility_pictures_path == [] %}
+                                <div class="alert alert-warning" role="alert">
+                                    No images available. Please check back later.
+                                </div>
+                                <div class="col">
+                                    <a href="{{ url_for('static', filename='images/facility_images/default.jpeg') }}" data-lightbox="my-gallery">
+                                        <img src="{{ url_for('static', filename='images/facility_images/default.jpeg') }}" alt="Facility Default Image">
+                                    </a>
+                                </div>
+
+                                {% endif %}
+                                {% for picture_path in facility_pictures_path %}
+                                <div class="col mb-3">
+                                    <a href="{{ picture_path }}" data-lightbox="my-gallery">
+                                        <img src="{{ picture_path }}" class="img-fluid" alt="{{ facility.name }} Gallery">
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" row facility-story p-4">
+                        <div class="col-md-12">
+                            <h5 class="card-title p-2">Facility Contact Details</h5>
+                         <div class=" ps-4 pb-2">
+                            <div class="d-flex gap-3 fs-5">
+                                <i class="bi bi-telephone"></i>
+                                <span>{{ facility.contact_phone }}</span>
+                            </div>
+                            <div class="d-flex gap-3 fs-5">
+                                <i class="bi bi-envelope"></i>
+                                <span>{{ facility.contact_email }}</span>
+                            </div>
+                            <div class="d-flex gap-3 fs-5">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>{{ facility.location }}</span>
+                            </div>
+                         </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="card-title p-2">Facility Story</h5>
+                            {% if facility.story %}
+                                <p class="p-2">{{ facility.story }}</p>
+                            {% else %}
+                                <p class="p-2">No story available</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="card-title p-2">About  {{ owner.first_name }}</h5>
+                            {% if owner.about %}
+                                <p class="p-2">{{ owner.about }}</p>
+                            {% else %}
+                                <p class="p-2">No information available</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="card-title p-2">Facility Services</h5>
+                            {% if facility.services %}
+                                <p class="p-2">{{ facility.services }}</p>
+                            {% else %}
+                                <ul class="list-group border-0">
+                                    <li class="list-group list-group-item border-0">
+                                        <i class="bi bi-check2"></i>
+                                        Daycare
+                                    </li>
+                                    <li class="list-group list-group-item border-0">
+                                        <i class="bi bi-check2"></i>
+                                        Boarding
+                                    </li>
+                                </ul>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="card-title p-2">Skills and Qualifications</h5>
+                            {% if owner.skills_and_qualifications %}
+                                <p class="p-2">{{ owner.skills_and_qualifications }}</p>
+                            {% else %}
+                                <p class="p-2">No skills and qualifications available</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="card-title p-2">Facility Capacity</h5>
+                            {% if facility.capacity %}
+                                <p class="p-2">{{ facility.capacity }}</p>
+                            {% else %}
+                                <p class="p-2">No capacity available</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="card-title p-2">Facility Amenities</h5>
+                            {% if facility.amenities %}
+                                <p class="p-2">{{ facility.amenities }}</p>
+                            {% else %}
+                                <p class="p-2">No amenities available</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="card-title p-2">Facility Opening Hours</h5>
+                            {% if facility.opening_hours %}
+                                <p class="p-2">{{ facility.opening_hours }}</p>
+                            {% else %}
+                                <p class="p-2">No opening hours available</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="card-title p-2">Facility Pricing</h5>
+                            {% if facility.pricing %}
+                                <p class="p-2">{{ facility.pricing }}</p>
+                            {% else %}
+                                <p class="p-2">No pricing available</p>
+                            {% endif %}
+                            </div>
+                        <div class="col-6 d-grid gap-2 mx-auto">
+                            <a href="{{ url_for('create_booking', facility_name=facility.name) }}" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endblock %}
