@@ -581,6 +581,41 @@ def create_booking():
         db.session.add(booking)
         db.session.commit()
         flash('Booking successfully created.', 'success')
+
+        check_in = booking.check_in.strftime('%B %d, %Y')
+        check_out = booking.check_out.strftime('%B %d, %Y')
+
+        # Send email notfications
+
+        send_notification(
+        booking.user.email,
+        'Booking Created Successfully!',
+        template=(
+            f'<p> Hi {booking.user.first_name}, </p>'
+            f'<p> You have successfully created a booking at {booking.facility.name} '
+            f'.</p>'
+            f'<p> <b>Check-in:</b> {check_in} </p>'
+            f'<p> <b>Check-out:</b> {check_out} </p>'
+            f'<p> <b>Number of dogs:</b> {booking.number_of_dogs} </p>'
+            f'<p>Please log in and check your dahsboard for any information might not be correct.</p>'
+            f'<p> Best regards, </p> <p> The PawsitivelyBooked Team </p>'
+        )
+        )
+
+        send_notification(
+        booking.facility.contact_email,
+        f'New Booking Request - Booking ID #{booking.id}',
+        template=(
+            f'<p> Hi {booking.facility.owner.first_name},</p>'
+            f'<p> You have recieved a new  booking for {booking.facility.name} with ID #{booking.id}. </p>'
+            f'<p> <b>Check-in:</b> {check_in} </p>'
+            f'<p> <b>Check-out:</b> {check_out} </p>'
+            f'<p> <b>Number of dogs:</b> {booking.number_of_dogs} </p>'
+            f'<p> Please check your dashboard for more details. </p>'
+            f'<p> Best regards, </p> <p> The PawsitivelyBooked Team </p>'
+        )
+        )
+
         return redirect(url_for('dashboard_dog_owner'))
     elif request.method == 'GET':
         form.check_in.data = datetime.now()
@@ -630,6 +665,40 @@ def cancel_booking(booking_id):
     booking.status = 'cancelled'
     db.session.commit()
     flash('Booking successfully cancelled.', 'success')
+
+    check_in = booking.check_in.strftime('%B %d, %Y')
+    check_out = booking.check_out.strftime('%B %d, %Y')
+
+        # Send email notfications
+
+    send_notification(
+    booking.user.email,
+    'Booking Cancelled',
+    template=(
+        f'<p> Hi {booking.user.first_name}, </p>'
+        f'<p> You have cancelled your booking {booking.facility.name} '
+        f'.</p>'
+        f'<p> <b>Check-in:</b> {check_in} </p>'
+        f'<p> <b>Check-out:</b> {check_out} </p>'
+        f'<p> <b>Number of dogs:</b> {booking.number_of_dogs} </p>'
+        f'<p>Please log in and check your dahsboard for any information might not be correct.</p>'
+        f'<p> Best regards, </p> <p> The PawsitivelyBooked Team </p>'
+    )
+    )
+
+    send_notification(
+    booking.facility.contact_email,
+    f'Booking Canncelled - Booking ID #{booking.id}',
+    template=(
+        f'<p> Hi {booking.facility.owner.first_name},</p>'
+        f'<p> This booking has been cancelled  Booking ID #{booking.id}. </p>'
+        f'<p> <b>Check-in:</b> {check_in} </p>'
+        f'<p> <b>Check-out:</b> {check_out} </p>'
+        f'<p> <b>Number of dogs:</b> {booking.number_of_dogs} </p>'
+        f'<p> Please check your dashboard for more details. </p>'
+        f'<p> Best regards, </p> <p> The PawsitivelyBooked Team </p>'
+    )
+    )
     return redirect(url_for('dashboard_dog_owner'))
 
 
