@@ -22,7 +22,7 @@
 - **Frontend:** HTML, CSS, JavaScript, Bootstrap
 - **Backend:** Python, Flask
 - **Database:** SQLite
-- **Authentication:** Flask-JWT for secure user authentication
+- **Authentication:** Flask-Login for secure user authentication
 - **Extrenal APIs:** Google Places API
 
 ## Getting started
