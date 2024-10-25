@@ -198,7 +198,7 @@ def dashboard_facility_owner():
     '''Define the view function for the dashboard page'''
 
     facilities_with_bookings = []
-    facilities = current_user.facilities.all()
+    facilities = current_user.facilities.all()    
     for facility in facilities:
         booking_requests = Booking.query.filter(Booking.facility_id == facility.id,
                                                 Booking.status == 'pending').all()
