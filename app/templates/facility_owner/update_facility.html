@@ -9,7 +9,7 @@
             <div class="col-lg-12">
                 <h1 class="display-5">Update Facility</h1>
                 <p class="lead">Update your facility's profile below.</p>
-                 
+
                 <form action="" method="post" enctype="multipart/form-data" novalidate>
                     {{ form.hidden_tag() }}
                     <fieldset class="form-group">
@@ -17,53 +17,55 @@
                             <div class="col-md-6 mb-3">
                                 {{ form.name.label(class="form-control-label") }}
                                 {% if form.name.errors %}
-                                    {{ form.name(class="form-control form-control-lg is-invalid") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.name.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
+                                {{ form.name(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}
+                                    <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
                                 {% else %}
-                                    {{ form.name(class="form-control form-control-lg") }}
+                                {{ form.name(class="form-control form-control-lg") }}
                                 {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
                                 {{ form.location.label(class="form-control-label") }}
                                 {% if form.location.errors %}
-                                    {{ form.location(class="form-control form-control-lg is-invalid") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.location.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
+                                {{ form.location(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.location.errors %}
+                                    <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
                                 {% else %}
-                                    {{ form.location(class="form-control form-control-lg", placeholder="your facility location") }}
+                                {{ form.location(class="form-control form-control-lg", placeholder="your facility
+                                location") }}
                                 {% endif %}
                             </div>
                             <div class="col-lg-6 mb-3">
                                 {{ form.contact_phone.label(class="form-control-label") }}
                                 {% if form.contact_phone.errors %}
-                                    {{ form.contact_phone(class="form-control form-control-lg is-invalid") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.contact_phone.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
+                                {{ form.contact_phone(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.contact_phone.errors %}
+                                    <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
                                 {% else %}
-                                    {{ form.contact_phone(class="form-control form-control-lg", placeholder="e.g 0712345678") }}
+                                {{ form.contact_phone(class="form-control form-control-lg", placeholder="e.g
+                                0712345678") }}
                                 {% endif %}
                             </div>
                             <div class="col-lg-6 mb-3">
                                 {{ form.contact_email.label(class="form-control-label") }}
                                 {% if form.contact_email.errors %}
-                                    {{ form.contact_email(class="form-control form-control-lg is-invalid") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.contact_email.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
+                                {{ form.contact_email(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.contact_email.errors %}
+                                    <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
                                 {% else %}
-                                    {{ form.contact_email(class="form-control form-control-lg") }}
+                                {{ form.contact_email(class="form-control form-control-lg") }}
                                 {% endif %}
                             </div>
                             <div class="col-lg-6 mb-3">
@@ -84,7 +86,8 @@
                             </div>
                             <div class="col-lg-6 mb-3">
                                 {{ form.about.label(class="form-control-label") }}
-                                {{ form.about(class="form-control form-control-lg", placeholder="A short story about your facility") }}
+                                {{ form.about(class="form-control form-control-lg", placeholder="A short story about
+                                your facility") }}
                             </div>
                             <div class="col-lg-6 mb-3">
                                 {{ form.services.label(class="form-control-label") }}
@@ -100,13 +103,13 @@
                                 <div>
                                     {% if form.photos.errors %}
                                     {% for error in form.photos.errors %}
-                                        <small class="text-danger">{{ error }}</small>
+                                    <small class="text-danger">{{ error }}</small>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
                             </div>
                             <div class="form-group mt-4">
-                                    {{ form.submit(class="btn btn-outline-info") }}
+                                {{ form.submit(class="btn btn-outline-info") }}
                             </div>
                         </div>
                     </fieldset>

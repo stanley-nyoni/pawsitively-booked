@@ -5,50 +5,50 @@
 {% block content %}
 
 <div class="login-pg pt-5">
-<div class="container login-section">
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Log In - Dog Owner</legend>
-            <div class="form-group mb-3">
-                {{ form.email.label(class="form-control-label") }}
-                {% if form.email.errors %}
+    <div class="container login-section">
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Log In - Dog Owner</legend>
+                <div class="form-group mb-3">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}
                     {{ form.email(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.email.errors %}
-                            <span>{{ error }}</span>
+                        <span>{{ error }}</span>
                         {% endfor %}
                     </div>
-                {% else %}
+                    {% else %}
                     {{ form.email(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group mb-3">
-                {{ form.password.label(class="form-control-label") }}
-                {% if form.password.errors %}
+                    {% endif %}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.password.label(class="form-control-label") }}
+                    {% if form.password.errors %}
                     {{ form.password(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.password.errors %}
-                            <span>{{ error }}</span>
+                        <span>{{ error }}</span>
                         {% endfor %}
                     </div>
-                {% else %}
+                    {% else %}
                     {{ form.password(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
+                    {% endif %}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.remember_me(class="form-check-input") }}
+                    {{ form.remember_me.label(class="form-check-label") }}
+                </div>
+            </fieldset>
             <div class="form-group mb-3">
-                {{ form.remember_me(class="form-check-input") }}
-                {{ form.remember_me.label(class="form-check-label") }}
+                {{ form.submit(class="btn btn-outline-info") }}
             </div>
-        </fieldset>
-        <div class="form-group mb-3">
-            {{ form.submit(class="btn btn-outline-info") }}
+        </form>
+        <div class="mt-4">
+            <p>Don't have an account? <a href="{{url_for('signup_dog_owner')}}">Sign Up</a></p>
         </div>
-    </form>
-    <div class="mt-4">
-        <p>Don't have an account? <a href="{{url_for('signup_dog_owner')}}">Sign Up</a></p>
     </div>
-</div>
 </div>
 
 {% endblock content %}

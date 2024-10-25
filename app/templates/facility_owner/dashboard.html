@@ -1,13 +1,107 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style>
+    .dashboard-pg {
+        background-color: #f8f9fa;
+        padding: 40px 20px;
+        min-height: 100vh;
+    }
+
+    .booking-overview-md .card {
+        margin-bottom: 15px;
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-overview .card {
+        margin-bottom: 15px;
+        background-color: #fff;
+        border-radius: 10px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .booking-overview .card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-overview-md-details {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .control-panel .card {
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .control-panel .list-group-item {
+        border: none;
+        border-bottom: 1px solid #e9ecef;
+        padding: 12px 16px;
+        transition: background-color 0.3s;
+    }
+
+    .control-panel .list-group-item:hover {
+        background-color: #f1f1f1;
+    }
+
+    .tab-content .card {
+        border-radius: 12px;
+        margin-top: 20px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .tab-content .table-striped>tbody>tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .tab-content .table-striped>tbody>tr:hover {
+        background-color: #e8f0fe;
+    }
+
+    @media (max-width: 768px) {
+        .booking-overview-md {
+            display: block;
+        }
+
+        .booking-overview {
+            display: none;
+        }
+
+        .dashboard-pg {
+            padding: 20px;
+        }
+    }
+
+    @media (min-width: 769px) {
+        .booking-overview-md {
+            display: none;
+        }
+
+        .booking-overview {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+    }
+</style>
+
 <div class="dashboard-pg" id="dashboard-home">
     {% if facilities %}
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="display-5">{{ greeting }}</h1>
-                <p class="lead">Welcome to your dashboard. Here you can manage your bookings, view your facilities, and update your profile.</p>
+                <p class="lead">Welcome to your dashboard. Here you can manage your bookings, view your facilities, and
+                    update your profile.</p>
             </div>
             <!-- Booking Overview - Mobile devices -->
             <div class="booking-overview-md">
@@ -15,44 +109,52 @@
                     <div class="card col pt-2">
                         <h5 class="d-flex justify-content-between align-items-center">
                             <span>Requests</span>
-                            <span class="text-primary d-flex p-1 align-items-center justify-content-center bg-light rounded-3"><i class="bi bi-calendar2-plus"></i></span>
+                            <span
+                                class="text-primary d-flex p-1 align-items-center justify-content-center bg-light rounded-3"><i
+                                    class="bi bi-calendar2-plus"></i></span>
                         </h5>
                         <p class="fw-semibold">
                             {% for facility in facilities_with_bookings %}
-                                {{ facility.booking_requests | length }}
+                            {{ facility.booking_requests | length }}
                             {% endfor %}
                         </p>
                     </div>
                     <div class="card col pt-2">
                         <h5 class="d-flex justify-content-between align-items-center">
                             <span>Upcoming</span>
-                            <span class="text-primary d-flex p-1 align-items-center justify-content-center bg-light rounded-3"><i class="bi bi-calendar-check"></i></span>
+                            <span
+                                class="text-primary d-flex p-1 align-items-center justify-content-center bg-light rounded-3"><i
+                                    class="bi bi-calendar-check"></i></span>
                         </h5>
                         <p class="fw-semibold">
                             {% for facility in facilities_with_bookings %}
-                                {{ facility.upcoming_bookings | length }}
+                            {{ facility.upcoming_bookings | length }}
                             {% endfor %}
                         </p>
                     </div>
                     <div class="card col pt-2">
                         <h5 class="d-flex justify-content-between align-items-center">
                             <span>Ongoing</span>
-                            <span class="text-primary d-flex p-1 align-items-center justify-content-center bg-light rounded-3"><i class="bi bi-calendar-date"></i></span>
+                            <span
+                                class="text-primary d-flex p-1 align-items-center justify-content-center bg-light rounded-3"><i
+                                    class="bi bi-calendar-date"></i></span>
                         </h5>
                         <p class="fw-semibold">
                             {% for facility in facilities_with_bookings %}
-                                {{ facility.ongoing_bookings | length }}
+                            {{ facility.ongoing_bookings | length }}
                             {% endfor %}
                         </p>
                     </div>
                     <div class="card col pt-2">
                         <h5 class="d-flex justify-content-between align-items-center">
                             <span>Total Completed</span>
-                            <span class="text-primary d-flex p-1 align-items-center justify-content-center bg-light rounded-3"><i class="bi bi-check2-square"></i></span>
+                            <span
+                                class="text-primary d-flex p-1 align-items-center justify-content-center bg-light rounded-3"><i
+                                    class="bi bi-check2-square"></i></span>
                         </h5>
                         <p class="fw-semibold">
                             {% for facility in facilities %}
-                                {{ facility.completed_bookings }}
+                            {{ facility.completed_bookings }}
                             {% endfor %}
                         </p>
                     </div>
@@ -65,14 +167,21 @@
                         <div class="card-body">
                             <h5 class="card-title text-center">Control Panel</h5>
                             <div class="list-group nav-tabs" id="dashboardTabs" role="tablist">
-                                <a href="#dashboard" class="list-group-item list-group-item-action d-flex gap-2 active" data-bs-toggle="tab"> <i class="bi bi-speedometer2"></i> Dashboard</a>
-                                <a href="#booking_requests" class="list-group-item list-group-item-action d-flex gap-2" data-bs-toggle="tab"> <i class="bi bi-calendar2-plus"></i>  Booking Requests </a>
-                                <a href="#upcoming_bookings" class="list-group-item list-group-item-action d-flex gap-2" data-bs-toggle="tab"> <i class="bi bi-calendar-check"></i>  Upcoming Bookings </a>
-                                <a href="#ongoing_bookings" class="list-group-item list-group-item-action d-flex gap-2" data-bs-toggle="tab"> <i class="bi bi-calendar2-date"></i>  Ongoing Bookings </a>
-                                <a href="#history_bookings" class="list-group-item list-group-item-action d-flex gap-2" data-bs-toggle="tab"><i class="bi bi-recycle"></i> Booking History </a>
+                                <a href="#dashboard" class="list-group-item list-group-item-action d-flex gap-2 active"
+                                    data-bs-toggle="tab"> <i class="bi bi-speedometer2"></i> Dashboard</a>
+                                <a href="#booking_requests" class="list-group-item list-group-item-action d-flex gap-2"
+                                    data-bs-toggle="tab"> <i class="bi bi-calendar2-plus"></i> Booking Requests </a>
+                                <a href="#upcoming_bookings" class="list-group-item list-group-item-action d-flex gap-2"
+                                    data-bs-toggle="tab"> <i class="bi bi-calendar-check"></i> Upcoming Bookings </a>
+                                <a href="#ongoing_bookings" class="list-group-item list-group-item-action d-flex gap-2"
+                                    data-bs-toggle="tab"> <i class="bi bi-calendar2-date"></i> Ongoing Bookings </a>
+                                <a href="#history_bookings" class="list-group-item list-group-item-action d-flex gap-2"
+                                    data-bs-toggle="tab"><i class="bi bi-recycle"></i> Booking History </a>
                                 <!-- <a href="{{url_for('create_booking')}}" class="list-group-item list-group-item-action d-flex gap-2"> <i class="bi bi-journal-plus"></i> Create a Booking</a> -->
-                                <a href="#" class="list-group-item list-group-item-action d-flex gap-2" data-bs-toggle="tab"> <i class="bi bi-bar-chart-line"></i>Perfomance </a>
-                                <a href="#" class="list-group-item list-group-item-action d-flex gap-2" data-bs-toggle="tab"> <i class="bi bi-bell"></i> Notification Center
+                                <a href="#" class="list-group-item list-group-item-action d-flex gap-2"
+                                    data-bs-toggle="tab"> <i class="bi bi-bar-chart-line"></i>Perfomance </a>
+                                <a href="#" class="list-group-item list-group-item-action d-flex gap-2"
+                                    data-bs-toggle="tab"> <i class="bi bi-bell"></i> Notification Center
                                     <!-- <span class="badge text-bg-danger">4</span> -->
                                 </a>
                             </div>
@@ -85,248 +194,262 @@
                     <div class="card col p-2">
                         <h5 class="d-flex justify-content-between align-items-center">
                             <span>Requests</span>
-                            <span class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i class="bi bi-calendar2-plus"></i></span>
+                            <span
+                                class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i
+                                    class="bi bi-calendar2-plus"></i></span>
                         </h5>
                         <p class="fs-1 fw-semibold">
                             {% for facility in facilities_with_bookings %}
-                                {{ facility.booking_requests | length }}
+                            {{ facility.booking_requests | length }}
                             {% endfor %}
                         </p>
                     </div>
                     <div class="card col p-2">
                         <h5 class="d-flex justify-content-between align-items-center">
                             <span>Upcoming</span>
-                            <span class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i class="bi bi-calendar-check"></i></span>
+                            <span
+                                class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i
+                                    class="bi bi-calendar-check"></i></span>
                         </h5>
                         <p class="fs-1 fw-semibold">
                             {% for facility in facilities_with_bookings %}
-                                {{ facility.upcoming_bookings | length }}
+                            {{ facility.upcoming_bookings | length }}
                             {% endfor %}
                         </p>
                     </div>
                     <div class="card col p-2">
                         <h5 class="d-flex justify-content-between align-items-center">
                             <span>Ongoing</span>
-                            <span class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i class="bi bi-calendar-date"></i></span>
+                            <span
+                                class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i
+                                    class="bi bi-calendar-date"></i></span>
                         </h5>
                         <p class="fs-1 fw-semibold">
                             {% for facility in facilities_with_bookings %}
-                                {{ facility.ongoing_bookings | length }}
+                            {{ facility.ongoing_bookings | length }}
                             {% endfor %}
                         </p>
                     </div>
                     <div class="card col p-2">
                         <h5 class="d-flex justify-content-between align-items-center">
                             <span>Total Completed</span>
-                            <span class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i class="bi bi-check2-square"></i></span>
+                            <span
+                                class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i
+                                    class="bi bi-check2-square"></i></span>
                         </h5>
                         <p class="fs-1 fw-semibold">
                             {% for facility in facilities %}
-                                {{ facility.completed_bookings }}
+                            {{ facility.completed_bookings }}
                             {% endfor %}
                         </p>
-                    </div>            
+                    </div>
                 </section>
                 <section class="bookings tab-content">
                     <div class="tab-pane active" id="dashboard">
                         <div class="card mt-4">
                             <div class="card-body">
                                 <h5 class="card-title text-center border-bottom pb-2">Dashboard</h5>
-                                <p class="lead">Welcome to your dashboard. Here you can manage your bookings, view your facilities, and update your profile.</p>
+                                <p class="lead">Welcome to your dashboard. Here you can manage your bookings, view your
+                                    facilities, and update your profile.</p>
                             </div>
                         </div>
                     </div>
-                <div class="tab-pane" id="booking_requests">
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            {% for facility in facilities_with_bookings %}
-                            <h5 class="card-title text-center border-bottom pb-2">Booking Requests
-                                {% if facility.booking_requests | length != 0 %}
-                                <span class="badge bg-primary">{{ facility.booking_requests | length }}</span>
-                                {% endif %}
-                            </h5>
+                    <div class="tab-pane" id="booking_requests">
+                        <div class="card mt-4">
+                            <div class="card-body">
+                                {% for facility in facilities_with_bookings %}
+                                <h5 class="card-title text-center border-bottom pb-2">Booking Requests
+                                    {% if facility.booking_requests | length != 0 %}
+                                    <span class="badge bg-primary">{{ facility.booking_requests | length }}</span>
+                                    {% endif %}
+                                </h5>
                                 {% if facility.booking_requests %}
                                 <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Client Name</th>
-                                            <th scope="col">Facility</th>
-                                            <th scope="col">Check-in Date</th>
-                                            <th scope="col">Check-out Date</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Client Name</th>
+                                                <th scope="col">Facility</th>
+                                                <th scope="col">Check-in Date</th>
+                                                <th scope="col">Check-out Date</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             {% for booking in facility.booking_requests %}
-                                                <tr>
-                                                    <td>{{ booking.user.first_name }}</td>
-                                                    <td>{{ booking.facility.name }}</td>
-                                                    <td>{{ booking.check_in_formatted }}</td>
-                                                    <td>{{ booking.check_out_formatted }}</td>
-                                                    <td>{{ booking.status }}</td>
-                                                    <td>
-                                                        <a href="{{ url_for('view_booking_facility_owner', booking_id=booking.id)}}" class="btn btn-sm btn-primary">View</a>
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td>{{ booking.user.first_name }}</td>
+                                                <td>{{ booking.facility.name }}</td>
+                                                <td>{{ booking.check_in_formatted }}</td>
+                                                <td>{{ booking.check_out_formatted }}</td>
+                                                <td>{{ booking.status }}</td>
+                                                <td>
+                                                    <a href="{{ url_for('view_booking_facility_owner', booking_id=booking.id)}}"
+                                                        class="btn btn-sm btn-primary">View</a>
+                                                </td>
+                                            </tr>
                                             {% endfor %}
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <p class="lead">You have no booking requests.</p>
+                                {% endif %}
+                                {% endfor %}
                             </div>
-                            {% else %}
-                            <p class="lead">You have no booking requests.</p>
-                            {% endif %}
-                            {% endfor %}
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="upcoming_bookings">
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            {% for facility in facilities_with_bookings %}
-                            <h5 class="card-title text-center border-bottom pb-2">Upcoming Bookings
-                                {% if facility.upcoming_bookings | length != 0 %}
-                                <span class="badge bg-success">{{ facility.upcoming_bookings | length }}</span>
-                                {% endif %}
-                            </h5>
+                    <div class="tab-pane fade" id="upcoming_bookings">
+                        <div class="card mt-4">
+                            <div class="card-body">
+                                {% for facility in facilities_with_bookings %}
+                                <h5 class="card-title text-center border-bottom pb-2">Upcoming Bookings
+                                    {% if facility.upcoming_bookings | length != 0 %}
+                                    <span class="badge bg-success">{{ facility.upcoming_bookings | length }}</span>
+                                    {% endif %}
+                                </h5>
                                 {% if facility.upcoming_bookings %}
                                 <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Client Name</th>
-                                            <th scope="col">Facility</th>
-                                            <th scope="col">Check-in Date</th>
-                                            <th scope="col">Check-out Date</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Client Name</th>
+                                                <th scope="col">Facility</th>
+                                                <th scope="col">Check-in Date</th>
+                                                <th scope="col">Check-out Date</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             {% for booking in facility.upcoming_bookings %}
-                                                <tr>
-                                                    <td>{{ booking.user.first_name }}</td>
-                                                    <td>{{ booking.facility.name }}</td>
-                                                    <td>{{ booking.check_in_formatted }}</td>
-                                                    <td>{{ booking.check_out_formatted }}</td>
-                                                    <td>{{ booking.status }}</td>
-                                                    <td>
-                                                        <a href="{{ url_for('view_booking_facility_owner', booking_id=booking.id)}}" class="btn btn-sm btn-primary">View</a>
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td>{{ booking.user.first_name }}</td>
+                                                <td>{{ booking.facility.name }}</td>
+                                                <td>{{ booking.check_in_formatted }}</td>
+                                                <td>{{ booking.check_out_formatted }}</td>
+                                                <td>{{ booking.status }}</td>
+                                                <td>
+                                                    <a href="{{ url_for('view_booking_facility_owner', booking_id=booking.id)}}"
+                                                        class="btn btn-sm btn-primary">View</a>
+                                                </td>
+                                            </tr>
                                             {% endfor %}
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <p class="lead">You have no upcoming bookings.</p>
+                                {% endif %}
+                                {% endfor %}
                             </div>
-                            {% else %}
-                            <p class="lead">You have no upcoming bookings.</p>
-                            {% endif %}
-                            {% endfor %}
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="ongoing_bookings">
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            {% for facility in facilities_with_bookings %}
-                            <h5 class="card-title text-center border-bottom pb-2">Ongoing Bookings
-                                {% if facility.ongoing_bookings %}
-                                <span class="badge bg-success">{{ facility.ongoing_bookings | length }}</span>
-                                {% endif %}
-                            </h5>
+                    <div class="tab-pane fade" id="ongoing_bookings">
+                        <div class="card mt-4">
+                            <div class="card-body">
+                                {% for facility in facilities_with_bookings %}
+                                <h5 class="card-title text-center border-bottom pb-2">Ongoing Bookings
+                                    {% if facility.ongoing_bookings %}
+                                    <span class="badge bg-success">{{ facility.ongoing_bookings | length }}</span>
+                                    {% endif %}
+                                </h5>
                                 {% if facility.ongoing_bookings %}
                                 <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Client Name</th>
-                                            <th scope="col">Facility</th>
-                                            <th scope="col">Check-in Date</th>
-                                            <th scope="col">Check-out Date</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Client Name</th>
+                                                <th scope="col">Facility</th>
+                                                <th scope="col">Check-in Date</th>
+                                                <th scope="col">Check-out Date</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             {% for booking in facility.ongoing_bookings %}
-                                                <tr>
-                                                    <td>{{ booking.user.first_name }}</td>
-                                                    <td>{{ booking.facility.name }}</td>
-                                                    <td>{{ booking.check_in_formatted }}</td>
-                                                    <td>{{ booking.check_out_formatted }}</td>
-                                                    <td>{{ booking.status }}</td>
-                                                    <td>
-                                                        <a href="{{ url_for('view_booking_facility_owner', booking_id=booking.id)}}" class="btn btn-sm btn-primary">View</a>
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td>{{ booking.user.first_name }}</td>
+                                                <td>{{ booking.facility.name }}</td>
+                                                <td>{{ booking.check_in_formatted }}</td>
+                                                <td>{{ booking.check_out_formatted }}</td>
+                                                <td>{{ booking.status }}</td>
+                                                <td>
+                                                    <a href="{{ url_for('view_booking_facility_owner', booking_id=booking.id)}}"
+                                                        class="btn btn-sm btn-primary">View</a>
+                                                </td>
+                                            </tr>
                                             {% endfor %}
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <p class="lead">You have no ongoing bookings.</p>
+                                {% endif %}
+                                {% endfor %}
                             </div>
-                            {% else %}
-                            <p class="lead">You have no ongoing bookings.</p>
-                            {% endif %}
-                            {% endfor %}
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="history_bookings">
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            {% for facility in facilities_with_bookings %}
-                            <h5 class="card-title text-center border-bottom pb-2">Past Bookings
-                                {% if facility.history_bookings | length != 0 %}
-                                <span class="badge bg-danger">{{ facility.history_bookings | length }}</span>
-                                {% endif %}
-                            </h5>
+                    <div class="tab-pane fade" id="history_bookings">
+                        <div class="card mt-4">
+                            <div class="card-body">
+                                {% for facility in facilities_with_bookings %}
+                                <h5 class="card-title text-center border-bottom pb-2">Past Bookings
+                                    {% if facility.history_bookings | length != 0 %}
+                                    <span class="badge bg-danger">{{ facility.history_bookings | length }}</span>
+                                    {% endif %}
+                                </h5>
                                 {% if facility.history_bookings %}
                                 <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Client Name</th>
-                                            <th scope="col">Facility</th>
-                                            <th scope="col">Check-in Date</th>
-                                            <th scope="col">Check-out Date</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Client Name</th>
+                                                <th scope="col">Facility</th>
+                                                <th scope="col">Check-in Date</th>
+                                                <th scope="col">Check-out Date</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             {% for booking in facility.history_bookings %}
-                                                <tr>
-                                                    <td>{{ booking.user.first_name }}</td>
-                                                    <td>{{ booking.facility.name }}</td>
-                                                    <td>{{ booking.check_in_formatted }}</td>
-                                                    <td>{{ booking.check_out_formatted }}</td>
-                                                    <td>{{ booking.status }}</td>
-                                                    <td>
-                                                        <a href="{{ url_for('view_booking_facility_owner', booking_id=booking.id)}}" class="btn btn-sm btn-primary">View</a>
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td>{{ booking.user.first_name }}</td>
+                                                <td>{{ booking.facility.name }}</td>
+                                                <td>{{ booking.check_in_formatted }}</td>
+                                                <td>{{ booking.check_out_formatted }}</td>
+                                                <td>{{ booking.status }}</td>
+                                                <td>
+                                                    <a href="{{ url_for('view_booking_facility_owner', booking_id=booking.id)}}"
+                                                        class="btn btn-sm btn-primary">View</a>
+                                                </td>
+                                            </tr>
                                             {% endfor %}
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <p class="lead">You have no past bookings.</p>
+                                {% endif %}
+                                {% endfor %}
                             </div>
-                            {% else %}
-                            <p class="lead">You have no past bookings.</p>
-                            {% endif %}
-                            {% endfor %}
                         </div>
                     </div>
-                </div>
                 </section>
             </div>
         </div>
     </div>
 
     {% else %}
-        <div class="dashboard-pg">
-            <h1 class="display-5">{{ greeting }}</h1>
-            <p class="lead">Ready to share your facility with a community of caring pet owners? Register your facility now.</p>
-            <a href="{{url_for('facility_registration')}}" class="btn btn-primary">Register Facility</a>
-        </div>
+    <div class="dashboard-pg">
+        <h1 class="display-5">{{ greeting }}</h1>
+        <p class="lead">Ready to share your facility with a community of caring pet owners? Register your facility now.
+        </p>
+        <a href="{{url_for('facility_registration')}}" class="btn btn-primary">Register Facility</a>
+    </div>
     {% endif %}
 </div>
 {% endblock content %}

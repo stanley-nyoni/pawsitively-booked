@@ -1,46 +1,91 @@
-<!-- Display facilities -->
-
+<!-- Display Facilities -->
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="dashboard-pg">
+
+<style>
+    .dashboard-pg {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .card-header {
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        border-bottom: none;
+    }
+
+    .list-unstyled {
+        padding-left: 0;
+        line-height: 1.8;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .alert-link {
+        font-weight: bold;
+    }
+
+    .card-footer {
+        border-top: none;
+    }
+</style>
+<div class="dashboard-pg py-5 bg-light">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="display-5">My Facilities</h1>
-                <p class="lead">View and manage your facilities.</p>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h1 class="display-4 text-center mb-4">My Facilities</h1>
+                <p class="lead text-center text-muted mb-5">View and manage your facilities with ease.</p>
+
                 {% if facilities %}
                 {% for facility in facilities %}
-                <div class="card mt-4">
+                <div class="card mb-5 shadow-sm border-0">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h5 class="card-title mb-0">{{ facility.name }}</h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title text-center border-bottom pb-2">{{ facility.name }}</h5>
-                        <div class="row mt-4">
+                        <div class="row">
                             <div class="col-lg-6">
-                                <p><strong>Name:</strong> {{ facility.name }}</p>
-                                <p><strong>Location:</strong> {{ facility.location }}</p>
-                                <p><strong>Description:</strong> {{ facility.description }}</p>
-                                <p><strong>Bookings:</strong> {{ facility.completed_bookings }}</p>
-                                <p><strong>Operating Hours:</strong> {{ facility.operating_hours }}</p>
-                                <p><strong>Pricing:</strong> {{ facility.pricing }}</p>
-                                <p><strong>Amenities:</strong> {{ facility.amenities }}</p>
+                                <ul class="list-unstyled">
+                                    <li><strong>Name:</strong> {{ facility.name }}</li>
+                                    <li><strong>Location:</strong> {{ facility.location }}</li>
+                                    <li><strong>Description:</strong> {{ facility.description }}</li>
+                                    <li><strong>Bookings:</strong> {{ facility.completed_bookings }}</li>
+                                    <li><strong>Operating Hours:</strong> {{ facility.operating_hours }}</li>
+                                    <li><strong>Pricing:</strong> {{ facility.pricing }}</li>
+                                    <li><strong>Amenities:</strong> {{ facility.amenities }}</li>
+                                </ul>
                             </div>
                             <div class="col-lg-6">
-                                <p><strong>Owner:</strong> {{ facility.owner.first_name }} {{ facility.owner.last_name }}</p>
-                                <p><strong>Owner Email:</strong> {{ facility.contact_email }}</p>
-                                <p><strong>Owner Phone:</strong> {{ facility.contact_phone }}</p>
-                                <p><strong>Owner Address:</strong> {{ facility.owner.address }}</p>
-                            </div>
-                            <div class="col-lg-12">
-                                <a href="{{ url_for('dashboard_facility_owner') }}" class="btn btn-dark">Back</a>
-                                <a href="{{ url_for('update_facility_profile', facility_id=facility.id) }}" class="btn btn-primary">Update</a>
+                                <ul class="list-unstyled">
+                                    <li><strong>Owner:</strong> {{ facility.owner.first_name }} {{
+                                        facility.owner.last_name }}</li>
+                                    <li><strong>Owner Email:</strong> {{ facility.contact_email }}</li>
+                                    <li><strong>Owner Phone:</strong> {{ facility.contact_phone }}</li>
+                                    <li><strong>Owner Address:</strong> {{ facility.owner.address }}</li>
+                                </ul>
                             </div>
                         </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between bg-white">
+                        <a href="{{ url_for('dashboard_facility_owner') }}" class="btn btn-outline-secondary">Back</a>
+                        <a href="{{ url_for('update_facility_profile', facility_id=facility.id) }}"
+                            class="btn btn-primary">Update</a>
                     </div>
                 </div>
                 {% endfor %}
                 {% else %}
-                <div class="alert alert-info" role="alert">
-                    No facility found. <a href="{{url_for('facility_registration')}}"  class="alert-link text-decoration-none">Create a facility</a>
+                <div class="alert alert-info text-center" role="alert">
+                    No facility found. <a href="{{ url_for('facility_registration') }}" class="alert-link">Create a
+                        facility</a>.
                 </div>
                 {% endif %}
             </div>

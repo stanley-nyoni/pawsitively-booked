@@ -29,18 +29,18 @@
                             <div class="col-lg-6">
                                 <p><strong>Owner:</strong> {{ dog.owner.first_name }} {{ dog.owner.last_name }}</p>
                                 <p><strong>Owner Email:</strong> {{ dog.owner.email }}</p>
-                               {% if dog.owner.phone %}
+                                {% if dog.owner.phone %}
                                 <p><strong>Owner Phone:</strong> {{ dog.owner.phone }}</p>
                                 {% else %}
-                                <p><strong>Owner Phone: </strong> 
+                                <p><strong>Owner Phone: </strong>
                                     <a href="{{ url_for('user_profile', dog_id=dog.id) }}">Add Phone</a>
                                 </p>
                                 {% endif %}
-                                
+
                                 {% if dog.owner.location %}
                                 <p><strong>Owner Address:</strong> {{ dog.owner.location }}</p>
                                 {% else %}
-                                <p><strong>Owner Address:</strong> 
+                                <p><strong>Owner Address:</strong>
                                     <a href="{{url_for('set_location')}}">Set Location</a>
 
                                 </p>
@@ -48,7 +48,8 @@
                             </div>
                             <div class="col-lg-12">
                                 <a href="{{ url_for('dashboard_dog_owner') }}" class="btn btn-dark">Back</a>
-                                <a href="{{ url_for('update_dog_profile', dog_id=dog.id) }}" class="btn btn-primary">Update</a>
+                                <a href="{{ url_for('update_dog_profile', dog_id=dog.id) }}"
+                                    class="btn btn-primary">Update</a>
                             </div>
                         </div>
                     </div>

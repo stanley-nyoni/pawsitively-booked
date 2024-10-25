@@ -2,57 +2,115 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="dashboard-pg">
+
+<style>
+    .dashboard-pg {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    h6.text-primary {
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .badge {
+        font-size: 1rem;
+        padding: 0.5em 0.75em;
+    }
+
+    .btn-lg {
+        border-radius: 30px;
+        font-size: 1.2rem;
+        margin-top: 10px;
+    }
+</style>
+<div class="dashboard-pg py-5 bg-light">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="display-5">Booking Details</h1>
+        <div class="row mb-4">
+            <div class="col-lg-12 text-center">
+                <h1 class="display-5 fw-bold">Booking Details</h1>
                 <p class="lead">View the booking details below and take an action!</p>
             </div>
-            <div class="col-lg-12">
-                <div class="card">
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title text-center border-bottom pb-2">Booking Details</h5>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <p class="lead">Booking Info</p>
-                                <p><strong>Booking Code:</strong> {{booking.booking_code}}</p>
-                                <p><strong>Number of Dogs: </strong> {{ booking.number_of_dogs }}</p>
-                                <p><strong>Check-in Date: </strong> {{ check_in }}</p>
-                                <p><strong>Check-out Date: </strong>{{ check_out }}</p>
-                                {% if booking.daycare == "1" or booking.boarding == "1" %}
-                                <p><strong>Service Requested</strong></p>
-                                <ul>
-                                    {% if booking.daycare == "1" %}
-                                    <li>Daycare</li>
-                                    {% endif %}
-                                    {% if booking.boarding == "1" %}
-                                    <li>Boarding</li>
-                                    {% endif %}
-                                </ul>
-                                {% else %}
-                                <p>No services requested.</p>
-                                {% endif %}
-                                <p><strong>Created at: </strong>{{created_at }}</p>
-                                <p><strong>Last updated at: </strong>{{ updated_at }}</p>
-                                <p><strong>Status: </strong>{{ booking.status }}</p>
+                        <h5 class="card-title text-center border-bottom pb-3">Booking Information</h5>
+                        <div class="row py-3">
+                            <!-- Booking Info -->
+                            <div class="col-md-6 mb-4">
+                                <h6 class="text-primary">Booking Info</h6>
+                                <div class="list-group">
+                                    <div class="list-group-item"><strong>Booking Code:</strong> <span
+                                            class="text-dark">{{ booking.booking_code }}</span></div>
+                                    <div class="list-group-item"><strong>Number of Dogs:</strong> <span
+                                            class="font-weight-bold">{{ booking.number_of_dogs }}</span></div>
+                                    <div class="list-group-item"><strong>Check-in Date:</strong> <span
+                                            class="text-success">{{ check_in }}</span></div>
+                                    <div class="list-group-item"><strong>Check-out Date:</strong> <span
+                                            class="text-danger">{{ check_out }}</span></div>
+
+                                    <div class="list-group-item"><strong>Service Requested:</strong></div>
+                                    <div class="list-group-item">
+                                        {% if booking.daycare == "1" or booking.boarding == "1" %}
+                                        <ul class="list-unstyled">
+                                            {% if booking.daycare == "1" %}
+                                            <li class="text-muted">Daycare</li>
+                                            {% endif %}
+                                            {% if booking.boarding == "1" %}
+                                            <li class="text-muted">Boarding</li>
+                                            {% endif %}
+                                        </ul>
+                                        {% else %}
+                                        <p>No services requested.</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="list-group-item"><strong>Created At:</strong> <span
+                                            class="text-muted">{{ created_at }}</span></div>
+                                    <div class="list-group-item"><strong>Last Updated At:</strong> <span
+                                            class="text-muted">{{ updated_at }}</span></div>
+                                    <div class="list-group-item"><strong>Status:</strong> <span
+                                            class="badge bg-info text-dark">{{ booking.status }}</span></div>
+                                </div>
                             </div>
-                            <div class="col-lg-6">
-                                <p class="lead">Client Details</p>
-                                <p><strong>Client username: </strong>{{ booking.user.username }}</p>
-                                <p><strong>Client phone: </strong>{{ booking.user.phone_number }}</p>
-                                <p><strong>Client email: </strong>{{ booking.user.email }}</p>
+
+                            <!-- Client Info -->
+                            <div class="col-md-6 mb-4">
+                                <h6 class="text-primary">Client Details</h6>
+                                <div class="list-group">
+                                    <div class="list-group-item"><strong>Username:</strong> <span
+                                            class="font-weight-bold">{{ booking.user.username }}</span></div>
+                                    <div class="list-group-item"><strong>Phone:</strong> <span class="text-muted">{{
+                                            booking.user.phone_number }}</span></div>
+                                    <div class="list-group-item"><strong>Email:</strong> <span class="text-muted">{{
+                                            booking.user.email }}</span></div>
+                                </div>
                             </div>
-                            <div class="col-lg-12">
+
+                            <!-- Actions -->
+                            <div class="col-lg-12 text-center mt-4">
                                 {% if booking.status == 'pending' %}
                                 <a href="{{ url_for('accept_booking', booking_id=booking.id) }}"
-                                    class="btn btn-success">Accept</a>
+                                    class="btn btn-success btn-lg px-4 me-2">Accept</a>
                                 <a href="{{ url_for('decline_booking', booking_id=booking.id) }}"
-                                    class="btn btn-danger">Decline</a>
+                                    class="btn btn-danger btn-lg px-4">Decline</a>
                                 {% else %}
-                                <a href="{{ url_for('dashboard_facility_owner') }}" class="btn btn-dark">Back</a>
+                                <a href="{{ url_for('dashboard_facility_owner') }}"
+                                    class="btn btn-dark btn-lg px-4">Back</a>
                                 {% endif %}
-
                             </div>
                         </div>
                     </div>

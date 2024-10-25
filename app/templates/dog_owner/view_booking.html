@@ -2,40 +2,94 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    .dashboard-pg {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    h6.text-primary {
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .badge {
+        font-size: 1rem;
+        padding: 0.5em 0.75em;
+    }
+
+    .btn-lg {
+        border-radius: 30px;
+        font-size: 1.2rem;
+        margin-top: 10px;
+    }
+</style>
 <div class="dashboard-pg">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="display-5">Booking Details</h1>
-                <p class="lead">View your booking details below.</p>
-                <div class="card">
+                <h1 class="display-5 fw-bold text-center">Booking Details</h1>
+                <p class="lead text-center text-muted mb-4">View your booking details below.</p>
+                <div class="card border-primary">
                     <div class="card-body">
-                        <h5 class="card-title text-center border-bottom pb-2">Booking Details</h5>
+                        <h5 class="card-title text-center border-bottom pb-3">Booking Overview</h5>
                         <div class="row">
-                            <div class="col-lg-6">
-                                <p><strong>Facility Name:</strong> {{ booking.facility.name }}</p>
-                                <p><strong>Check In:</strong> {{ check_in}}</p>
-                                <p><strong>Check Out:</strong> {{ check_out}}</p>
-                                <p><strong>Created at:</strong> {{ created_at }}</p>
-                                <p><strong>Last Updated at:</strong> {{ updated_at }}</p>
-                                <p><strong>Created By:</strong> {{ booking.user.first_name }}</p>
-                                <p><strong>Number of Dogs:</strong> {{ booking.number_of_dogs }}</p>
-                                <p><strong>Dogs:</strong>
-                                    {% for dog in dogs %}
-                                        {{ dog.name }} {% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                </p>
-                                <p><strong>Status:</strong> {{ booking.status }}</p>
+                            <div class="col-lg-6 mb-4">
+                                <h6 class="font-weight-bold text-primary">Booking Information</h6>
+                                <div class="list-group">
+                                    <div class="list-group-item"><strong>Booking Code:</strong> <span
+                                            class="text-dark">{{ booking.booking_code }}</span></div>
+                                    <div class="list-group-item"><strong>Facility Name:</strong> <span
+                                            class="text-dark">{{ booking.facility.name }}</span></div>
+                                    <div class="list-group-item"><strong>Check In:</strong> <span
+                                            class="text-success">{{ check_in }}</span></div>
+                                    <div class="list-group-item"><strong>Check Out:</strong> <span
+                                            class="text-danger">{{ check_out }}</span></div>
+                                    <div class="list-group-item"><strong>Created at:</strong> <span
+                                            class="text-muted">{{ created_at }}</span></div>
+                                    <div class="list-group-item"><strong>Last Updated at:</strong> <span
+                                            class="text-muted">{{ updated_at }}</span></div>
+                                    <div class="list-group-item"><strong>Created By:</strong> <span
+                                            class="font-italic">{{ booking.user.first_name }}</span></div>
+                                    <div class="list-group-item"><strong>Number of Dogs:</strong> <span
+                                            class="font-weight-bold">{{ booking.number_of_dogs }}</span></div>
+                                    <div class="list-group-item"><strong>Dogs:</strong>
+                                        {% for dog in dogs %}
+                                        <span class="badge badge-secondary text-dark">{{ dog.name }}</span>{% if not
+                                        loop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="list-group-item"><strong>Status:</strong> <span
+                                            class="badge bg-info text-dark">{{ booking.status }}</span></div>
+                                </div>
                             </div>
-                            <div class="col-lg-6">
-                                <p><strong>Facility Address:</strong> {{ booking.facility.location }}</p>
-                                <p><strong>Facility Phone:</strong> {{ booking.facility.contact_phone }}</p>
-                                <p><strong>Facility Email:</strong> {{ booking.facility.contact_email }}</p>
-                                <p><strong>Facility Description:</strong> {{ booking.facility.description }}</p>
+                            <div class="col-lg-6 mb-4">
+                                <h6 class="font-weight-bold text-primary">Facility Details</h6>
+                                <div class="list-group">
+                                    <div class="list-group-item"><strong>Facility Address:</strong> <span
+                                            class="text-muted">{{ booking.facility.location }}</span></div>
+                                    <div class="list-group-item"><strong>Facility Phone:</strong> <span
+                                            class="text-muted">{{ booking.facility.contact_phone }}</span></div>
+                                    <div class="list-group-item"><strong>Facility Email:</strong> <span
+                                            class="text-muted">{{ booking.facility.contact_email }}</span></div>
+                                    <div class="list-group-item"><strong>Facility Description:</strong> <span>{{
+                                            booking.facility.description }}</span></div>
+                                </div>
                             </div>
-                            <div class="col-lg-12">
-                                <a href="{{ url_for('dashboard_dog_owner') }}" class="btn btn-dark">Back</a>
-                                <a href="{{ url_for('dashboard_dog_owner') }}" class="btn btn-primary">Update</a>
+                            <div class="col-lg-12 text-center mt-4">
+                                <a href="{{ url_for('dashboard_dog_owner') }}"
+                                    class="btn btn-outline-dark mr-2">Back</a>
+                                <a href="{{ url_for('dashboard_dog_owner') }}"
+                                    class="btn btn-outline-primary">Update</a>
                             </div>
                         </div>
                     </div>

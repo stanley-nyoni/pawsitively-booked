@@ -606,7 +606,7 @@ def create_booking():
 
         send_notification(
         booking.user.email,
-        f'Booking Created Successfully! #ID {booking.booking_code}',
+        f'Booking Created Successfully! Code #{booking.booking_code}',
         template=(
             f'<p> Hi {booking.user.first_name}, </p>'
             f'<p> You have successfully created a booking at {booking.facility.name} '
@@ -621,10 +621,10 @@ def create_booking():
 
         send_notification(
         booking.facility.contact_email,
-        f'New Booking Request - Booking ID #{booking.booking_code}',
+        f'New Booking Request - Booking Code #{booking.booking_code}',
         template=(
             f'<p> Hi {booking.facility.owner.first_name},</p>'
-            f'<p> You have recieved a new  booking for {booking.facility.name} with ID #{booking.id}. </p>'
+            f'<p> You have recieved a new  booking for {booking.facility.name} with code #{booking.booking_code}. </p>'
             f'<p> <b>Check-in:</b> {check_in} </p>'
             f'<p> <b>Check-out:</b> {check_out} </p>'
             f'<p> <b>Number of dogs:</b> {booking.number_of_dogs} </p>'
@@ -686,11 +686,10 @@ def cancel_booking(booking_id):
     check_in = booking.check_in.strftime('%B %d, %Y')
     check_out = booking.check_out.strftime('%B %d, %Y')
 
-        # Send email notfications
 
     send_notification(
     booking.user.email,
-    'Booking Cancelled',
+    f'Booking #{booking.booking_code} Cancelled',
     template=(
         f'<p> Hi {booking.user.first_name}, </p>'
         f'<p> You have cancelled your booking {booking.facility.name} '
@@ -705,10 +704,10 @@ def cancel_booking(booking_id):
 
     send_notification(
     booking.facility.contact_email,
-    f'Booking Canncelled - Booking ID #{booking.id}',
+    f'Booking #{booking.booking_code} Canncelled',
     template=(
         f'<p> Hi {booking.facility.owner.first_name},</p>'
-        f'<p> This booking has been cancelled  Booking ID #{booking.id}. </p>'
+        f'<p> This booking has been cancelled  Booking code #{booking.booking_code}. </p>'
         f'<p> <b>Check-in:</b> {check_in} </p>'
         f'<p> <b>Check-out:</b> {check_out} </p>'
         f'<p> <b>Number of dogs:</b> {booking.number_of_dogs} </p>'

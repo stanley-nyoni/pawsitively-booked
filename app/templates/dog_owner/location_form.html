@@ -15,53 +15,53 @@
                     <div class="form-group mb-3">
                         {{ form.street.label(class="form-control-label") }}
                         {% if form.street.errors %}
-                            {{ form.street(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.street.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
+                        {{ form.street(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.street.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
                         {% else %}
-                            {{ form.street(class="form-control form-control-lg") }}
+                        {{ form.street(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
                     <div class="form-group mb-3">
                         {{ form.city.label(class="form-control-label") }}
                         {% if form.city.errors %}
-                            {{ form.city(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.city.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
+                        {{ form.city(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.city.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
                         {% else %}
-                            {{ form.city(class="form-control form-control-lg") }}
+                        {{ form.city(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
                     <div class="form-group mb-3">
                         {{ form.postal_code.label(class="form-control-label") }}
                         {% if form.postal_code.errors %}
-                            {{ form.postal_code(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.postal_code.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
+                        {{ form.postal_code(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.postal_code.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
                         {% else %}
-                            {{ form.postal_code(class="form-control form-control-lg") }}
+                        {{ form.postal_code(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
                     <div class="form-group mb-3">
                         {{ form.country.label(class="form-control-label") }}
                         {% if form.country.errors %}
-                            {{ form.country(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.country.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
+                        {{ form.country(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.country.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
                         {% else %}
-                            {{ form.country(class="form-control form-control-lg") }}
+                        {{ form.country(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
                     <div class="form-group mt-4">
@@ -73,4 +73,3 @@
     </div>
 </div>
 {% endblock content %}
-

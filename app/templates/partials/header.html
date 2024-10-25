@@ -2,29 +2,32 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-          {% if current_user.is_anonymous %}
+            {% if current_user.is_anonymous %}
             <a class="navbar-brand" href="{{url_for('index')}}">
                 <span class="logo-wrapper">
-                    <img src="{{ url_for('static', filename='images/paw-print.png')}}" width="20" alt="PawsitivelyBooked Logo">
+                    <img src="{{ url_for('static', filename='images/paw-print.png')}}" width="20"
+                        alt="PawsitivelyBooked Logo">
                     <span class="fs-3">PawsitivelyBooked</span>
                 </span>
             </a>
             {% else %}
-                {% if current_user.user_type == 'facility_owner' %}
-                    <a class="navbar-brand" href="{{url_for('redirect_dashboard')}}">
-                        <span class="logo-wrapper">
-                            <img src="{{ url_for('static', filename='images/paw-print.png')}}" width="20" alt="PawsitivelyBooked Logo">
-                            <span class="fs-3">PawsitivelyBooked</span>
-                        </span>
-                    </a>
-                {% elif current_user.user_type == 'dog_owner' %}
-                    <a class="navbar-brand" href="{{url_for('index')}}">
-                        <span class="logo-wrapper">
-                            <img src="{{ url_for('static', filename='images/paw-print.png')}}" width="20" alt="PawsitivelyBooked Logo">
-                            <span class="fs-3">PawsitivelyBooked</span>
-                        </span>
-                    </a>
-                {% endif %}
+            {% if current_user.user_type == 'facility_owner' %}
+            <a class="navbar-brand" href="{{url_for('redirect_dashboard')}}">
+                <span class="logo-wrapper">
+                    <img src="{{ url_for('static', filename='images/paw-print.png')}}" width="20"
+                        alt="PawsitivelyBooked Logo">
+                    <span class="fs-3">PawsitivelyBooked</span>
+                </span>
+            </a>
+            {% elif current_user.user_type == 'dog_owner' %}
+            <a class="navbar-brand" href="{{url_for('index')}}">
+                <span class="logo-wrapper">
+                    <img src="{{ url_for('static', filename='images/paw-print.png')}}" width="20"
+                        alt="PawsitivelyBooked Logo">
+                    <span class="fs-3">PawsitivelyBooked</span>
+                </span>
+            </a>
+            {% endif %}
             {% endif %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,58 +36,65 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     {% if current_user.is_anonymous %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{url_for('features')}}">Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{url_for('faqs')}}">FAQs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('login')}}">Log In</a>
-                        </li>
-                        <li class="nav-item bg-primary rounded">
-                            <a class="nav-link text-light" href="{{ url_for('signup')}}">Sign Up</a>
-                        </li>
-                    {% else %} 
-                        <li class="nav-item">
-                            {% if current_user.user_type == 'dog_owner' %}
-                            <a class="nav-link" href="{{url_for('index')}}">Facilities Near Me</a>
-                            {% elif current_user.user_type == 'facility_owner' %}
-                            <a class="nav-link" href="{{url_for('my_facilities')}}">My Facilities</a>
-                            {% endif %}
-                        </li>
-                        <li class="nav-item">
-                            {% if current_user.user_type == 'dog_owner' %}
-                                <a class="nav-link" href="{{ url_for('dashboard_dog_owner') }}">Dashboard</a>
-                            {% elif current_user.user_type == 'facility_owner' %}
-                                <a class="nav-link" href="{{ url_for('dashboard_facility_owner') }}">Dashboard</a>
-                            {% endif %}
-                        </li>
-                        <li class="nav-item">
-                            {% if current_user.user_type == 'dog_owner' %}
-                                <div class="dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
-                                    <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{url_for('user_profile')}}">My Profile</a></li>
-                                    <li><a class="dropdown-item" href="{{url_for('settings')}}">Settings</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('faqs')}}">Help Center</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('logout')}}">Log Out</a></li>
-                                    </ul>
-                                </div>
-                            {% elif current_user.user_type == 'facility_owner' %}
-                                <div class="dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
-                                    <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{url_for('user_profile_facility_owner')}}">My Profile</a></li>
-                                    <li><a class="dropdown-item" href="{{url_for('settings')}}">Settings</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('faqs')}}">Help Center</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('logout')}}">Log Out</a></li>
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('features')}}">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('faqs')}}">FAQs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login')}}">Log In</a>
+                    </li>
+                    <li class="nav-item bg-primary rounded">
+                        <a class="nav-link text-light" href="{{ url_for('signup')}}">Sign Up</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        {% if current_user.user_type == 'dog_owner' %}
+                        <a class="nav-link" href="{{url_for('index')}}">Facilities Near Me</a>
+                        {% elif current_user.user_type == 'facility_owner' %}
+                        <a class="nav-link" href="{{url_for('my_facilities')}}">My Facilities</a>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item">
+                        {% if current_user.user_type == 'dog_owner' %}
+                        <a class="nav-link" href="{{ url_for('dashboard_dog_owner') }}">Dashboard</a>
+                        {% elif current_user.user_type == 'facility_owner' %}
+                        <a class="nav-link" href="{{ url_for('dashboard_facility_owner') }}">Dashboard</a>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item">
+                        {% if current_user.user_type == 'dog_owner' %}
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">Account</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{url_for('user_profile')}}">My Profile</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('settings')}}">Settings</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('faqs')}}">Help Center</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout')}}">Log Out</a></li>
+                            </ul>
+                        </div>
+                        {% elif current_user.user_type == 'facility_owner' %}
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">Account</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{url_for('user_profile_facility_owner')}}">My
+                                        Profile</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('settings')}}">Settings</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('faqs')}}">Help Center</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout')}}">Log Out</a></li>
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </li>
                     {% endif %}
                 </ul>
             </div>
