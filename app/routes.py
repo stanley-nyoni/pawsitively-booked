@@ -407,6 +407,7 @@ def signup_dog_owner():
                            user_type='dog_owner')
         
         user.set_password(form.password.data)
+        user.created_at = datetime.now()
         db.session.add(user)
         db.session.commit()
 
@@ -437,6 +438,7 @@ def signup_facility_owner():
         
         # print(form.password.data)
         user.set_password(form.password.data)
+        user.created_at = datetime.now()
         db.session.add(user)
         db.session.commit()
 
@@ -1153,6 +1155,52 @@ def set_location():
         flash('Location successfully updated', 'success')
         return redirect(url_for('redirect_dashboard'))
     return render_template('dog_owner/location_form.html', form=form)
+
+
+#------------------SETTINGS-------------------
+
+@app.route('/account/settings')
+@login_required
+def settings():
+    if current_user.created_at:
+        date_created = current_user.created_at.strftime('%d %B, %Y')
+        time_created = current_user.created_at.strftime('%I:%M %p')
+    else:
+         return render_template("/account/settings.html")
+        
+
+    return render_template("account/settings.html", time=time_created, date=date_created)
+
+
+@app.route('/account/settings/delete_account/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def delete_account(user_id):
+    '''The view function for the delete account page'''
+
+    if current_user.id != user_id:
+        flash('You do not have permission to delete this account.', 'danger')
+        return redirect(url_for('settings'))
+    
+
+    try:
+        user = User.query.get_or_404(user_id)
+        db.session.delete(user)
+        db.session.commit()
+
+        logout_user()
+        session.clear()
+        flash('Account successfully deleted.', 'success')
+        return redirect(url_for('goodbye'))
+    except Exception as e:
+        flash('An error occured. Please try again.', 'danger')
+        return redirect(url_for('settings'))
+    
+
+
+
+@app.route('/account/goodbye')
+def goodbye():
+    return render_template("account/goodbye.html")
 
 # --------------------LOGOUT--------------------
 
