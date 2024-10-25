@@ -32,7 +32,7 @@ To get a local copy up and running, follow these steps:
 ## Prerequisites
 
 - Python 3.x
-- 
+- pip 
 
 ## Installation
 
