@@ -590,6 +590,7 @@ def create_booking():
                           facility_id = facility.id,
                           daycare = form.daycare.data,
                           boarding = form.boarding.data,
+                          notes = form.notes.data,
                           number_of_dogs=form.number_of_dogs.data)
         
         db.session.add(booking)
@@ -602,33 +603,53 @@ def create_booking():
         check_in = booking.check_in.strftime('%B %d, %Y')
         check_out = booking.check_out.strftime('%B %d, %Y')
 
-        # Send email notfications
+        services_requested = ''
+        if booking.daycare:
+            services_requested += 'Daycare, '
+        if booking.boarding:
+            services_requested += 'Boarding'
 
+        # Sending email to the user
         send_notification(
         booking.user.email,
         f'Booking Created Successfully! Code #{booking.booking_code}',
         template=(
             f'<p> Hi {booking.user.first_name}, </p>'
-            f'<p> You have successfully created a booking at {booking.facility.name} '
-            f'.</p>'
+            f'<p> You have successfully created a booking at {booking.facility.name} with code #{booking.booking_code}. Below are the details: </p>'
+            f'<h5>Facility Information:</h5>'
+            f'<p> <b>Name:</b> {booking.facility.name} </p>'
+            f'<p> <b>Location:</b> {booking.facility.location} </p>'
+            f'<h2>Booking Details:</h2>'
+            f'<p><b>Booking Reference: </b> { booking.booking_code }</p>'
+            f'<p><b>Service Requested: </b> { services_requested }</p>'
             f'<p> <b>Check-in:</b> {check_in} </p>'
             f'<p> <b>Check-out:</b> {check_out} </p>'
             f'<p> <b>Number of dogs:</b> {booking.number_of_dogs} </p>'
-            f'<p>Please log in and check your dahsboard for any information might not be correct.</p>'
+            f'<p> <b> Special Requests/Notes:</b> { booking.notes } </p>'
+            f'<p> Please check your dashboard for any information that might not be correct. </p>'
             f'<p> Best regards, </p> <p> The PawsitivelyBooked Team </p>'
         )
         )
 
+        # Sending email to the facility owner
         send_notification(
         booking.facility.contact_email,
         f'New Booking Request - Booking Code #{booking.booking_code}',
         template=(
             f'<p> Hi {booking.facility.owner.first_name},</p>'
-            f'<p> You have recieved a new  booking for {booking.facility.name} with code #{booking.booking_code}. </p>'
+            f'<p> You have recieved a new  booking for {booking.facility.name} with code #{booking.booking_code}. Below are the details: </p>'
+            f'<h2>Dog Owner Information:</h2>'
+            f'<p> <b>Name:</b> {booking.user.first_name} {booking.user.last_name} </p>'
+            f'<p> <b>Email:</b> {booking.user.email} </p>'
+            f'<p> <b>Phone Number:</b> {booking.user.phone_number} </p>'
+            f'<h2>Booking Details:</h2>'
+            f'<p><b>Booking Reference: </b> { booking.booking_code }</p>'
+            f'<p><b>Service Requested: </b> { services_requested }</p>'
             f'<p> <b>Check-in:</b> {check_in} </p>'
             f'<p> <b>Check-out:</b> {check_out} </p>'
             f'<p> <b>Number of dogs:</b> {booking.number_of_dogs} </p>'
-            f'<p> Please check your dashboard for more details. </p>'
+            f'<p> <b> Special Requests/Notes:</b> { booking.notes } </p>'
+            f'<p> Please check your dashboard to review the request and take action! </p>'
             f'<p> Best regards, </p> <p> The PawsitivelyBooked Team </p>'
         )
         )

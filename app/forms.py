@@ -151,7 +151,7 @@ class BookingForm(FlaskForm):
     facility = StringField('Facility Name', validators=[DataRequired()])
     check_in = DateField('Check-in Date', validators=[DataRequired()])
     check_out = DateField('Check-out Date', validators=[DataRequired()])
-    notes = TextAreaField('Extra Information (optional)')
+    notes = TextAreaField('Special Requests/Notes (optional)')
     daycare = BooleanField('Daycare')
     boarding = BooleanField('Boarding')
     number_of_dogs = SelectField('Number of Dogs', choices=[('Select number of dogs', 'Select number of dogs'),('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6')], validators=[DataRequired()])
