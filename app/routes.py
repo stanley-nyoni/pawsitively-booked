@@ -248,7 +248,7 @@ def dashboard_facility_owner():
 
 # Update bookings
 # This automatically update the bookings
-# Visit models
+# See models.py
 
 @app.route('/update_bookings')
 def update_bookings():
@@ -276,13 +276,13 @@ def update_bookings():
             booking.facility.completed_bookings = 1
 
         send_notification(booking.user.email,
-                          'Your Booking is Now Complete - Thank you!',
-                          template=f"<p> Hi {booking.user.first_name}, </p> <p>We hope your furry friend enjoyed their stay with us! We are writing to let you know that your booking at {booking.facility.name} has been successfully completed. </p> <p> Here are the datails of your booking: </p> <p> <b>Check-in: </b> {booking.check_in} </p> <p> <b>Check-out: </b> {booking.check_out} </p> <p> <b>Number of dogs: </b>{booking.number_of_dogs} </p><p><b> Facility: </b>{booking.facility.name} </p><p><b>Total Stay Duration: </b> {booking.total_days} days </p>  <p>We would love to hear about your experience. Your feedback helps us improve and continue providing the best care for your beloved pet.</p> <p> Thank you for using our services. We look forward to seeing you again soon! </p> <p> Best regards, </p> <p> The PawsitivelyBooked Team </p>")
+                          f'Your Booking #{booking.booking_code} is Now Complete - Thank you!',
+                          template=f"<p> Hi {booking.user.first_name}, </p> <p>We hope your furry friend enjoyed their stay with us! We are writing to let you know that your booking at {booking.facility.name} has been successfully completed. </p> <p> Here are the datails of your booking: </p> <p> <b>Check-in: </b> {booking.check_in} </p> <p> <b>Check-out: </b> {booking.check_out} </p> <p> <b>Number of dogs: </b>{booking.number_of_dogs} </p><p><b> Facility: </b>{booking.facility.name} </p> <p>We would love to hear about your experience. Your feedback helps us improve and continue providing the best care for your beloved pet.</p> <p> Thank you for using our services. We look forward to seeing you again soon! </p> <p> Best regards, </p> <p> The PawsitivelyBooked Team </p>")
 
         
         send_notification(booking.facility.owner.email,
-                            'Booking Completion Notification - Booking ID #{}'.format(booking.id),
-                               template=f"<p> Hi {booking.facility.owner.first_name}, </p> <p> This is a notification to inform you that the booking with ID #{booking.id} for {booking.user.first_name }at your facility, {booking.facility.name}, has been successfully completed as of {booking.check_out}</p> <p> Here are the details of the booking: </p> <p> <b>Check-in: </b> {booking.check_in} </p> <p> <b>Check-out: </b> {booking.check_out} </p> <p> <b>Number of dogs: </b>{booking.number_of_dogs} </p><p><b> Facility: </b>{booking.facility.name} </p><p><b>Total Stay Duration: </b> {booking.total_days} days </p> <p> Thank you for your attention to this booking. Your dedication to providing excellent service is greatly appreciated. </p> <p> Best regards, </p> <p> The PawsitivelyBooked Team </p>")
+                            'Booking Completion Notification - Booking Code #{}'.format(booking.booking_code),
+                               template=f"<p> Hi {booking.facility.owner.first_name}, </p> <p> This is a notification to inform you that the booking with Code #{booking.booking_code} for {booking.user.first_name }at your facility, {booking.facility.name}, has been successfully completed as of {booking.check_out}</p> <p> Here are the details of the booking: </p> <p> <b>Check-in: </b> {booking.check_in} </p> <p> <b>Check-out: </b> {booking.check_out} </p> <p> <b>Number of dogs: </b>{booking.number_of_dogs} </p><p><b> Facility: </b>{booking.facility.name} </p><p> Thank you for your attention to this booking. Your dedication to providing excellent service is greatly appreciated. </p> <p> Best regards, </p> <p> The PawsitivelyBooked Team </p>")
 
     # Commit the changes to the database
     db.session.commit()
