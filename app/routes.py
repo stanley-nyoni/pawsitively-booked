@@ -2,7 +2,8 @@
 
 import string
 import random
-from sqlalchemy import and_
+from app import scheduler
+from sqlalchemy import and_, or_
 from geopy.distance import geodesic
 import requests, secrets, os
 from datetime import datetime
@@ -159,9 +160,22 @@ def dashboard_dog_owner():
         booking.check_in_formatted = booking.check_in.strftime('%B %d, %Y')
         booking.check_out_formatted = booking.check_out.strftime('%B %d, %Y')
 
-    history_bookings = Booking.query.filter(Booking.issued_by == current_user.id,
-                                           Booking.status.in_(['completed', 'cancelled', 'declined', 'expired']),
-                                              Booking.check_out > datetime.now()).all()
+
+    history_bookings = Booking.query.filter(
+                    Booking.issued_by == current_user.id,
+                        or_(
+                            and_(
+                                Booking.status.in_(['completed', 'expired']),
+                                Booking.check_out <= datetime.now()
+                            ),
+                            and_(
+                                Booking.status.in_(['cancelled', 'declined']),
+                                Booking.check_out > datetime.now()
+                            )
+                        )
+                    ).all()
+
+
     for booking in history_bookings:
         booking.check_in_formatted = booking.check_in.strftime('%B %d, %Y')
         booking.check_out_formatted = booking.check_out.strftime('%B %d, %Y')
@@ -222,9 +236,21 @@ def dashboard_facility_owner():
             booking.check_in_formatted = booking.check_in.strftime('%B %d, %Y')
             booking.check_out_formatted = booking.check_out.strftime('%B %d, %Y')
         
-        history_bookings = Booking.query.filter(Booking.facility_id == facility.id,
-                                                Booking.status.in_(['completed', 'cancelled', 'declined', 'expired']),
-                                                Booking.check_out > datetime.now()).all()
+
+        history_bookings = Booking.query.filter(
+        Booking.facility_id == facility.id,
+                    or_(
+                        and_(
+                            Booking.status.in_(['completed','expired']),
+                            Booking.check_out <= datetime.now()
+                        ),
+                        and_(
+                            Booking.status.in_(['cancelled', 'declined']),
+                            Booking.check_out > datetime.now()
+                        )
+                    )
+                ).all()
+
         for booking in history_bookings:
             booking.check_in_formatted = booking.check_in.strftime('%B %d, %Y')
             booking.check_out_formatted = booking.check_out.strftime('%B %d, %Y')
@@ -250,44 +276,70 @@ def dashboard_facility_owner():
 # This automatically update the bookings
 # See models.py
 
-@app.route('/update_bookings')
 def update_bookings():
     '''Update the booking status'''
+    print(f'Updating bookings at {datetime.now()}')
+    with app.app_context():
+        ongoing_bookings = Booking.query.filter(Booking.check_in <= datetime.now(),
+                                    Booking.status.in_(['accepted'])).all()
+        for booking in ongoing_bookings:
+            booking.update_status()
 
-    ongoing_bookings = Booking.query.filter(Booking.check_in <= datetime.now(),
-                                    Booking.status.in_(['accepted', 'pending'])).all()
-    for booking in ongoing_bookings:
-        booking.update_status()
-
-    expired_bookings = Booking.query.filter(Booking.check_out <= datetime.now(),
-                                    Booking.status.in_(['accepted', 'pending'])).all()
-    for booking in expired_bookings:
-        booking.status = 'expired'
+        expired_bookings = Booking.query.filter(Booking.check_out <= datetime.now(),
+                                        Booking.status.in_(['pending'])).all()
+        for booking in expired_bookings:
+            booking.status = 'expired'
 
 
-    completed_bookings = Booking.query.filter(Booking.check_out <= datetime.now(),
-                                    Booking.status == 'ongoing').all()
-    
-    for booking in completed_bookings:
-        booking.status = 'completed'
-        if booking.facility.completed_bookings:
-            booking.facility.completed_bookings += 1
-        else:
-            booking.facility.completed_bookings = 1
-
-        send_notification(booking.user.email,
-                          f'Your Booking #{booking.booking_code} is Now Complete - Thank you!',
-                          template=f"<p> Hi {booking.user.first_name}, </p> <p>We hope your furry friend enjoyed their stay with us! We are writing to let you know that your booking at {booking.facility.name} has been successfully completed. </p> <p> Here are the datails of your booking: </p> <p> <b>Check-in: </b> {booking.check_in} </p> <p> <b>Check-out: </b> {booking.check_out} </p> <p> <b>Number of dogs: </b>{booking.number_of_dogs} </p><p><b> Facility: </b>{booking.facility.name} </p> <p>We would love to hear about your experience. Your feedback helps us improve and continue providing the best care for your beloved pet.</p> <p> Thank you for using our services. We look forward to seeing you again soon! </p> <p> Best regards, </p> <p> The PawsitivelyBooked Team </p>")
-
+        completed_bookings = Booking.query.filter(Booking.check_out <= datetime.now(),
+                                        Booking.status == 'ongoing').all()
         
-        send_notification(booking.facility.owner.email,
-                            'Booking Completion Notification - Booking Code #{}'.format(booking.booking_code),
-                               template=f"<p> Hi {booking.facility.owner.first_name}, </p> <p> This is a notification to inform you that the booking with Code #{booking.booking_code} for {booking.user.first_name }at your facility, {booking.facility.name}, has been successfully completed as of {booking.check_out}</p> <p> Here are the details of the booking: </p> <p> <b>Check-in: </b> {booking.check_in} </p> <p> <b>Check-out: </b> {booking.check_out} </p> <p> <b>Number of dogs: </b>{booking.number_of_dogs} </p><p><b> Facility: </b>{booking.facility.name} </p><p> Thank you for your attention to this booking. Your dedication to providing excellent service is greatly appreciated. </p> <p> Best regards, </p> <p> The PawsitivelyBooked Team </p>")
+        for booking in completed_bookings:
+            booking.status = 'completed'
+            if booking.facility.completed_bookings:
+                booking.facility.completed_bookings += 1
+            else:
+                booking.facility.completed_bookings = 1
 
-    # Commit the changes to the database
-    db.session.commit()
+            check_in = booking.check_in.strftime('%B %d, %Y')
+            check_out = booking.check_out.strftime('%B %d, %Y')
 
-    return 'Bookings updated successfully.'
+            send_notification(booking.user.email,
+                            f'Your Booking #{booking.booking_code} is Now Complete - Thank you!',
+                            template=(f'<p> Hi {booking.user.first_name}, </p>'
+                              f'<p>We hope your furry friend enjoyed their stay with us! We are writing to let you know that your booking at {booking.facility.name} has been successfully completed. </p>'
+                                f'<p> Here are the datails of your booking: </p>' 
+                                f'<p> <b>Check-in: </b> {check_in} </p>'
+                                f'<p> <b>Check-out: </b> {check_out} </p>'
+                                f'<p> <b>Number of dogs: </b>{booking.number_of_dogs} </p>'
+                                f'<p><b> Facility: </b>{booking.facility.name} </p>'
+                                f'<p>We would love to hear about your experience. Your feedback helps us improve and continue providing the best care for your beloved pet.</p>'
+                                f'<p> Thank you for using our services. We look forward to seeing you again soon! </p>'
+                                f'<p> Best regards, </p>' 
+                                f'<p> The PawsitivelyBooked Team </p>'
+                                ))
+
+            
+            send_notification(booking.facility.owner.email,
+                                'Booking Completion Notification - Booking Code #{}'.format(booking.booking_code),
+                                template=(f"<p> Hi {booking.facility.owner.first_name}, </p>"
+                                f'<p> This is a notification to inform you that the booking with Code #{booking.booking_code} for {booking.user.first_name }at your facility, {booking.facility.name}, has been successfully completed as of {booking.check_out}</p>'
+                                f'<p> Here are the details of the booking: </p>'
+                                f'<p> <b>Check-in: </b> {check_in} </p>' 
+                                f'<p> <b>Check-out: </b> {check_out} </p>' 
+                                f'<p> <b>Number of dogs: </b>{booking.number_of_dogs} </p>'
+                                f'<p><b> Facility: </b>{booking.facility.name} </p>'
+                                f'<p> Thank you for your attention to this booking. Your dedication to providing excellent service is greatly appreciated. </p>'
+                                f'<p> Best regards, </p>' 
+                                f'<p> The PawsitivelyBooked Team </p>'
+                                ))
+
+        # Commit the changes to the database
+        db.session.commit()
+
+# Add the update_bookings function to the scheduler
+scheduler.add_job(id='update_bookings', func=update_bookings, trigger='interval', hours=6)
+scheduler.start()
 
 
 # --------------------REDIRECT DASHBOARDS--------------------
@@ -1200,7 +1252,6 @@ def delete_account(user_id):
     if current_user.id != user_id:
         flash('You do not have permission to delete this account.', 'danger')
         return redirect(url_for('settings'))
-    
 
     try:
         user = User.query.get_or_404(user_id)
@@ -1215,8 +1266,6 @@ def delete_account(user_id):
         flash('An error occured. Please try again.', 'danger')
         return redirect(url_for('settings'))
     
-
-
 
 @app.route('/account/goodbye')
 def goodbye():

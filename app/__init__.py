@@ -7,6 +7,9 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 import geopy
 from flask_mail import Mail, Message
+from flask_apscheduler import APScheduler
+
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -18,6 +21,9 @@ login.login_message = 'Please log in to access this page.'
 login.login_message_category = 'warning'
 geolocator = geopy.Nominatim(user_agent="app")
 mail = Mail(app)
+scheduler = APScheduler()
+scheduler.init_app(app)
+
 
 
 
