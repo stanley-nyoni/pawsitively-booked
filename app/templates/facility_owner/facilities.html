@@ -76,9 +76,11 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-white">
-                        <a href="{{ url_for('dashboard_facility_owner') }}" class="btn btn-outline-secondary">Back</a>
-                        <a href="{{ url_for('update_facility_profile', facility_id=facility.id) }}"
-                            class="btn btn-primary">Update</a>
+                        <div>
+                            <a href="{{ url_for('dashboard_facility_owner') }}" class="btn btn-outline-secondary">Back</a>
+                            <a href="{{ url_for('update_facility_profile', facility_id=facility.id) }}" class="btn btn-primary">Update Facility Info</a>
+                        </div>
+                        <a href="{{ url_for('facility_dashboard_reviews', facility_id=facility.id) }}" class="btn btn-success">Your Reviews</a>
                     </div>
                 </div>
                 {% endfor %}
