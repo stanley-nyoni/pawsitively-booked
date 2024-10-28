@@ -1,58 +1,59 @@
-<!-- Authenticated Dog Owners Index Page -->
 <div class="bg-light py-5">
     {% if current_user.location %}
     <div class="container">
-        <!-- Heading Section -->
         <div class="text-center mb-5">
             <h1 class="display-5 fw-bold">Loving Pet Care in Your Neighborhood</h1>
             <p class="lead text-muted">Find the perfect pet care provider for your furry friend</p>
         </div>
 
-        <!-- Facilities List -->
         <div class="row g-4">
-            {% for facility in facilities %}
+            {% for facility, avg_rating, distance in facilities %}
             <div class="col-lg-12">
                 <a href="{{ url_for('view_facility', facility_id=facility.id) }}" class="text-decoration-none">
                     <div class="card shadow-sm p-3 hover-shadow">
                         <div class="row g-0 align-items-center">
-                            <!-- Facility Image -->
                             <div class="col-md-3">
                                 <img src="{{ url_for('static', filename='images/profile_pictures/default.jpeg') }}"
-                                    class="img-fluid rounded" alt="{{ facility.name }}" style="max-width: 200px;">
+                                     class="img-fluid rounded" alt="{{ facility.name }}" style="max-width: 200px;">
                             </div>
 
-                            <!-- Facility Details -->
                             <div class="col-md-6">
                                 <div class="card-body">
                                     <h5 class="card-title text-dark">{{ facility.name }}</h5>
                                     <p class="card-text text-muted">
                                         <i class="bi bi-geo-alt-fill text-primary"></i>
                                         {{ facility.location }}
-                                        <span class="fw-bold">: {{ facility.distance }} km</span>
+                                        {% if distance is not none %}
+                                        <span class="fw-bold">: {{ distance }} km</span>
+                                        {% endif %}
                                     </p>
                                     <p class="card-text text-muted">
                                         <i class="bi bi-list-check text-success"></i>
                                         {{ facility.description }}
                                     </p>
-                                    <p class="card-text text-muted">
-                                        "{{ facility.review }}"
-                                    </p>
 
-                                    <!-- Completed Bookings -->
-                                    <div class="d-flex align-items-center gap-2 text-success fw-bold">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="text-warning">
+                                            {% for i in range(1, 6) %}
+                                                <i class="bi bi-star{{ '-fill' if avg_rating >= i else '' }}"></i>
+                                            {% endfor %}
+                                        </span>
+                                        <span class="text-muted">({{ avg_rating|round(1) }})</span>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2 text-success fw-bold mt-2">
                                         <i class="bi bi-journal-check"></i>
                                         <span>{{ facility.completed_bookings or 0 }} Completed Bookings</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Pricing Section -->
                             {% if facility.pricing %}
                             <div class="col-md-3 text-end pe-4">
                                 <div class="card-body">
                                     <h5 class="lead">Pricing</h5>
                                     <small class="text-muted">FROM</small>
-                                    <p class="fw-bold fs-4">R {{ facility.pricing }}</p>
+                                    <p class="fw-bold fs-4">{{ facility.pricing }}</p>
                                     <p class="text-muted">per service</p>
                                 </div>
                             </div>
@@ -64,31 +65,26 @@
             {% endfor %}
         </div>
 
-        <!-- Pagination -->
         <nav aria-label="Page navigation example" class="mt-5">
             <ul class="pagination justify-content-center">
-                <!-- Previous Page -->
-                <li class="page-item {% if not facilities.has_prev %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('index', page=facilities.prev_num) }}">Previous</a>
+                <li class="page-item {% if current_page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('index', page=current_page - 1) }}">Previous</a>
                 </li>
 
-                <!-- Page Numbers -->
-                {% for page_num in range(1, facilities.pages + 1) %}
-                <li class="page-item {% if page_num == facilities.page %}active{% endif %}">
+                {% for page_num in range(1, total_pages + 1) %}
+                <li class="page-item {% if page_num == current_page %}active{% endif %}">
                     <a class="page-link" href="{{ url_for('index', page=page_num) }}">{{ page_num }}</a>
                 </li>
                 {% endfor %}
 
-                <!-- Next Page -->
-                <li class="page-item {% if not facilities.has_next %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('index', page=facilities.next_num) }}">Next</a>
+                <li class="page-item {% if current_page == total_pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('index', page=current_page + 1) }}">Next</a>
                 </li>
             </ul>
         </nav>
     </div>
 
     {% else %}
-    <!-- No Location Set -->
     <div class="container text-center py-5">
         <h1 class="display-5">Loving Pet Care in Your Neighborhood</h1>
         <p class="lead text-muted">Find the perfect pet care provider for your furry friend</p>

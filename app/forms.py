@@ -283,14 +283,14 @@ class UpdateFacilityProfileForm(FlaskForm):
     photos = FileField('Upload Facility Photos', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Update Profile')
 
-    def validate_location(self, location):
-        '''Check if location is valid or exists'''
-        if not location.data:
-            raise ValidationError('Please enter a location')
+    # def validate_location(self, location):
+    #     '''Check if location is valid or exists'''
+    #     if not location.data:
+    #         raise ValidationError('Please enter a location')
         
-        location = geolocator.geocode(location.data)
-        if not location:
-            raise ValidationError('Invalid location. Please enter a valid location')
+    #     location = geolocator.geocode(location.data)
+    #     if not location:
+    #         raise ValidationError('Invalid location. Please enter a valid location')
 
 #-----------------SEARCH FORM-----------------
 
