@@ -3,15 +3,16 @@
 import string
 import random
 from app import scheduler
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, func
 from geopy.distance import geodesic
+from operator import itemgetter
 import requests, secrets, os
 from datetime import datetime
 from urllib.parse import urlsplit
 from urllib.parse import quote
 from app import app, db, mail, Message
 from werkzeug.utils import secure_filename
-from app.models import User, Facility, Dog, DogOwner, FacilityOwner, Booking, FacilityPhoto
+from app.models import User, Facility, Dog, DogOwner, FacilityOwner, Booking, FacilityPhoto, Review
 from flask import render_template, redirect, flash, url_for, request, session
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import FacilityOwnerRegistrationForm, FacilityRegistrationForm, DogRegistrationForm
@@ -20,11 +21,17 @@ from app.forms import SearchFacilityForm, BookingForm, UpdateDogProfileForm, Upd
 from app.forms import SetLocationForm
 
 
+# API Keys for OpenWeatherMap and Google Maps
+# These are used to get the geolocation of the location
+
 OWM_API_KEY = app.config['OWM_API_KEY']
 GO_MAPS_API_KEY = app.config['GO_MAPS_API_KEY']
 
 
 # --------------------HELPER FUNCTIONS--------------------
+
+# Get the geolocation of the location
+# This is used to get the latitude and longitude of the location
 
 def get_location(location):
     '''Get the geolocation of the location'''
@@ -69,6 +76,9 @@ def generate_welcoming_msg():
 
 
 # Sending email notification function
+# This is used to send email notifications to the user and facility owner
+# on booking creation, cancellation, and completion
+
 def send_notification(email, subject, template):
     '''Send email notification'''
     msg = Message(subject,
@@ -78,6 +88,8 @@ def send_notification(email, subject, template):
     
     mail.send(msg)
 
+# Calculate the distance between the facility and the user
+# This is used to calculate the distance between the facility and the user
 
 def calculate_distance(facility, user):
     '''Calculate the distance between the facility and the user'''
@@ -109,20 +121,47 @@ def generate_booking_code():
 def index():
     '''Define the view function for the index page'''
     form = SearchFacilityForm()
-
     page = request.args.get('page', 1, type=int)
-    facilities = Facility.query.paginate(page=page, per_page=5)
 
-    # Calculate distnce from current user to each facility
+    # Query facilities with their average rating
+    facilities_query = (
+        db.session.query(
+            Facility,
+            func.coalesce(func.avg(Review.rating), 0).label('avg_rating')
+        )
+        .outerjoin(Review, Facility.id == Review.facility_id)
+        .group_by(Facility.id)
+    ).all()
 
-    if current_user.is_authenticated:
-        if current_user.location:
-            for facility in facilities.items:
-                facility.distance = calculate_distance(facility, current_user)
+    # Calculate the distance if the user is authenticated and has a location
+    facilities_with_distance = []
+    if current_user.is_authenticated and current_user.location:
+        for facility, avg_rating in facilities_query:
+            distance = calculate_distance(facility, current_user)
+            facilities_with_distance.append((facility, avg_rating, distance))
 
+        # Sort facilities by distance (nearest first)
+        # Sort by distance
+        facilities_with_distance.sort(key=itemgetter(2))  
 
-    return render_template('index.html', form=form, facilities=facilities)
+        # Paginate the sorted facilities
+        start = (page - 1) * 5
+        end = start + 5
+        facilities_paginated = facilities_with_distance[start:end]
+        total_pages = (len(facilities_with_distance) + 4) // 5
 
+    else:
+        # No location set, no distance sorting
+        facilities_paginated = [(facility, avg_rating, None) for facility, avg_rating in facilities_query]
+        total_pages = (len(facilities_query) + 4) // 5 
+
+    return render_template(
+        'index.html',
+        form=form,
+        facilities=facilities_paginated,
+        current_page=page,
+        total_pages=total_pages
+    )
 
 # --------------------CUSTOM ERROR PAGES--------------------
 
@@ -212,8 +251,11 @@ def dashboard_facility_owner():
     '''Define the view function for the dashboard page'''
 
     facilities_with_bookings = []
-    facilities = current_user.facilities.all()    
+    facilities = current_user.facilities.all()
     for facility in facilities:
+        facility.unresponded_count = Review.query.filter(
+            and_(Review.facility_id == facility.id, Review.response == None)
+        ).count() 
         booking_requests = Booking.query.filter(Booking.facility_id == facility.id,
                                                 Booking.status == 'pending').all()
         
@@ -900,7 +942,8 @@ def update_facility_profile(facility_id):
                     picture_file = save_photos(photo)
                     facility_photo = FacilityPhoto(facility_id=facility.id, photo_path=picture_file)
                     db.session.add(facility_photo)
-                    flash('Photos successfully uploaded.', 'success')
+                    db.session.commit()
+                    flash('Image successfully uploaded.', 'success')
                     
         if form.name.data != facility.name:
             facility.name = form.name.data
@@ -1270,6 +1313,99 @@ def delete_account(user_id):
 @app.route('/account/goodbye')
 def goodbye():
     return render_template("account/goodbye.html")
+
+
+
+
+#------------------REVIEWS-------------------
+
+
+# Reviews for facility owners
+# Facility Owners to view their facility reviews 
+
+@app.route('/facility_owner/<int:facility_id>/dashboard/reviews', methods=['GET', 'POST'])
+@login_required
+def facility_dashboard_reviews(facility_id):
+    '''Define the view function for the facility dashboard reviews page'''
+
+    facility = Facility.query.get_or_404(facility_id)
+
+    if facility.owner_id != current_user.id:
+        flash('You do not have permission to view this page.', 'danger')
+        return redirect(url_for('dashboard_facility_owner'))
+    
+    if request.method == 'POST':
+        review_id = request.form['review_id']
+        response = request.form['response']
+
+        if not response:
+            flash('Please provide a response.', 'danger')
+            return redirect(url_for('facility_dashboard_reviews', facility_id=facility_id))
+        
+        review = Review.query.get_or_404(review_id)
+        review.response = response
+        review.response_date = datetime.now()
+        db.session.commit()
+
+        flash('Response successfully added.', 'success')
+        return redirect(url_for('facility_dashboard_reviews', facility_id=facility_id))
+    
+    # Pagination for reviews
+    page = request.args.get('page', 1, type=int)
+    reviews = Review.query.filter_by(facility_id=facility_id) \
+                            .order_by(Review.created_at.desc()) \
+                            .paginate(page=page, per_page=3)
+    
+    return render_template('facility_owner/reviews.html', facility=facility, reviews=reviews)
+
+
+
+# Reviews for dog owners
+# Dog Owners to view facility reviews
+# Dog Owners to add reviews to a facility
+
+@app.route('/facility/<int:facility_id>/reviews', methods=['GET', 'POST'])
+@login_required
+def facilty_reviews(facility_id):
+    '''Define the view function to add and view reviews for a facility.'''
+    facility = Facility.query.get_or_404(facility_id)
+
+    if request.method == 'POST':
+        rating = request.form['rating']
+        comment = request.form['comment']
+
+        if not rating:
+            flash('Please select a rating.', 'danger')
+            return redirect(url_for('facilty_reviews', facility_id=facility_id))
+
+        if not comment:
+            flash('Please provide a comment.', 'danger')
+            return redirect(url_for('facilty_reviews', facility_id=facility_id))
+
+        review = Review(
+            rating=float(rating),
+            comment=comment,
+            user_id=current_user.id,
+            facility_id=facility_id
+        )
+
+        db.session.add(review)
+        db.session.commit()
+        flash('Review successfully added.', 'success')
+        return redirect(url_for('facilty_reviews', facility_id=facility_id))
+
+    # Pagination logic
+    page = request.args.get('page', 1, type=int)
+    reviews = Review.query.filter_by(facility_id=facility_id) \
+                          .order_by(Review.created_at.desc()) \
+                          .paginate(page=page, per_page=3)
+
+    return render_template(
+        'dog_owner/reviews.html',
+        facility=facility,
+        reviews=reviews
+    )
+
 
 # --------------------LOGOUT--------------------
 
