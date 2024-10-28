@@ -36,6 +36,7 @@ class User(UserMixin, db.Model):
     user_type = db.Column(db.String(64))
     image_file = db.Column(db.String(20), nullable=False, default='default.jpeg')
     bookings = db.relationship('Booking', back_populates='user')
+    reviews = db.relationship('Review', backref='user', lazy='dynamic')
 
     __mapper_args__ = {
         'polymorphic_identity': 'user',
@@ -140,6 +141,7 @@ class Facility(db.Model):
     completed_bookings = db.Column(db.Integer, default=0)
     repeated_bookings = db.Column(db.Integer, default=0)
     repeated_customers = db.Column(db.Integer, default=0)
+    avg_rating = db.Column(db.Float, default=0)
     photos = db.relationship('FacilityPhoto', backref='facility', lazy='dynamic')
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     bookings = db.relationship('Booking', back_populates='facility')
@@ -161,10 +163,14 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Float)
     comment = db.Column(db.Text)
+    response = db.Column(db.Text)
+    response_date = db.Column(db.DateTime)
+    deleted = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
+    
     
 
 class Booking(db.Model):
