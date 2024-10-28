@@ -109,6 +109,10 @@
             text-transform: uppercase;
             font-size: 14px;
         }
+
+        .notification-badge {
+            font-size: 1rem;
+        }
 </style>
 
 <div class="dashboard-pg" id="dashboard-home">
@@ -194,12 +198,21 @@
                                     data-bs-toggle="tab"> <i class="bi bi-calendar2-date"></i> Ongoing Bookings </a>
                                 <a href="#history_bookings" class="list-group-item list-group-item-action d-flex gap-2"
                                     data-bs-toggle="tab"><i class="bi bi-recycle"></i> Booking History </a>
-                                <!-- <a href="{{url_for('create_booking')}}" class="list-group-item list-group-item-action d-flex gap-2"> <i class="bi bi-journal-plus"></i> Create a Booking</a> -->
-                                <a href="#" class="list-group-item list-group-item-action d-flex gap-2"
-                                    data-bs-toggle="tab"> <i class="bi bi-bar-chart-line"></i>Perfomance </a>
+                                    {% for facility in facilities %}
+                                    <a href="{{ url_for('facility_dashboard_reviews', facility_id=facility.id) }}" 
+                                       class="list-group-item list-group-item-action gap-2 d-flex align-items-center">
+                                        <span>
+                                            <i class="bi bi-chat me-2"></i>Facility Reviews
+                                        </span>
+                                       {% if facility.unresponded_count > 0 %}
+                                       <span class="badge bg-danger notification-badge">
+                                        {{ facility.unresponded_count }}
+                                    </span>
+                                    {% endif %}
+                                    </a>
+                                {% endfor %}                                
                                 <a href="#" class="list-group-item list-group-item-action d-flex gap-2"
                                     data-bs-toggle="tab"> <i class="bi bi-bell"></i> Notification Center
-                                    <!-- <span class="badge text-bg-danger">4</span> -->
                                 </a>
                             </div>
                         </div>
@@ -213,9 +226,10 @@
                             <span>Requests</span>
                             <span
                                 class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i
-                                    class="bi bi-calendar2-plus"></i></span>
+                                    class="bi bi-calendar2-plus"></i>
+                            </span>
                         </h5>
-                        <p class="fs-1 fw-semibold">
+                        <p class="fs-1 text-danger text-center fw-semibold">
                             {% for facility in facilities_with_bookings %}
                             {{ facility.booking_requests | length }}
                             {% endfor %}
@@ -228,7 +242,7 @@
                                 class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i
                                     class="bi bi-calendar-check"></i></span>
                         </h5>
-                        <p class="fs-1 fw-semibold">
+                        <p class="fs-1 text-warning text-center fw-semibold">
                             {% for facility in facilities_with_bookings %}
                             {{ facility.upcoming_bookings | length }}
                             {% endfor %}
@@ -241,7 +255,7 @@
                                 class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i
                                     class="bi bi-calendar-date"></i></span>
                         </h5>
-                        <p class="fs-1 fw-semibold">
+                        <p class="fs-1 text-primary text-center fw-semibold">
                             {% for facility in facilities_with_bookings %}
                             {{ facility.ongoing_bookings | length }}
                             {% endfor %}
@@ -254,7 +268,7 @@
                                 class="text-primary d-flex p-3 align-items-center justify-content-center bg-light rounded-3"><i
                                     class="bi bi-check2-square"></i></span>
                         </h5>
-                        <p class="fs-1 fw-semibold">
+                        <p class="fs-1 text-success text-center fw-semibold">
                             {% for facility in facilities %}
                             {{ facility.completed_bookings }}
                             {% endfor %}
