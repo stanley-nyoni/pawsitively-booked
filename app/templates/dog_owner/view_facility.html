@@ -84,10 +84,7 @@
                         {{ detail_section('Facility Contact Details', facility.contact_phone ~ ' / ' ~
                         facility.contact_email ~ ' / ' ~ facility.location) }}
                         {{ detail_section('Facility Story', facility.about) }}
-                        {{ detail_section('Facility Services', facility.services or '<ul class="list-group">
-                            <li class="list-group-item">Daycare</li>
-                            <li class="list-group-item">Boarding</li>
-                        </ul>') }}
+                        {{ detail_section('Facility Services', facility.services or 'No services available.') }}
                         {{ detail_section('Facility Opening Hours', facility.operating_hours) }}
                         {{ detail_section('Facility Pricing', facility.pricing) }}
                         {{ detail_section('Facility Capacity', facility.capacity) }}
