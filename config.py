@@ -21,3 +21,17 @@ class Config:
     MAIL_USE_SSL = os.getenv('MAIL_USE_SSL', 'True').lower() in ['true', '1', 't']
     GO_MAPS_API_KEY = os.getenv('GO_MAPS_API_KEY')
     SCHEDULER_API_ENABLED = True
+
+
+
+# Test configurations
+# This configuration is used for running tests
+# See tests/
+
+class TestConfig(Config):
+    '''Test configuration class'''
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URL', 'sqlite:///:memory:')
+    WTF_CSRF_ENABLED = False
+    SCHEDULER_API_ENABLED = False
+
