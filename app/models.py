@@ -98,7 +98,7 @@ class FacilityOwner(User):
 class Dog(db.Model):
     '''Dog model'''
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), index=True, unique=True)
+    name = db.Column(db.String(64), index=True)
     breed = db.Column(db.String(64))
     age = db.Column(db.Integer)
     size = db.Column(db.String(64))

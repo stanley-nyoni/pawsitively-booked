@@ -107,8 +107,7 @@
                                     <div class="col-md-6 mb-3">
                                         {{ form.phone_number.label(class="form-label") }}
                                         {{ form.phone_number(class="form-control form-control-lg {% if
-                                        form.phone_number.errors %}is-invalid{% endif %}", placeholder="e.g.
-                                        0712345678") }}
+                                        form.phone_number.errors %}is-invalid{% endif %}", placeholder="0712345678") }}
                                         {% for error in form.phone_number.errors %}
                                         <div class="invalid-feedback">{{ error }}</div>
                                         {% endfor %}
